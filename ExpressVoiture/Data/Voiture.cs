@@ -42,5 +42,6 @@ namespace ExpressVoiture.Data
 
         [DataType(DataType.Date)]
         public DateTime? DateVente { get; set; }
+
     }
 }
