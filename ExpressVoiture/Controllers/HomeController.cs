@@ -15,11 +15,10 @@ namespace ExpressVoiture.Controllers
 
         public IActionResult Index()
         {
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Voitures");
+            }
             return View();
         }
 
