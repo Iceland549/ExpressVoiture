@@ -9,8 +9,10 @@ builder.Services.AddRazorPages();
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddIdentity<Utilisateur, IdentityRole>(options => {
@@ -19,15 +21,24 @@ builder.Services.AddIdentity<Utilisateur, IdentityRole>(options => {
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
 
+builder.Services.AddControllersWithViews();
+
 //builder.Services.AddAuthorization(options =>
 //{
 //    options.FallbackPolicy = new AuthorizationPolicyBuilder()
 //        .RequireAuthenticatedUser()
 //        .Build();
 //});
-builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+// Appeler SeedData après la configuration des services
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<ApplicationDbContext>();
+    SeedData.Initialize(context); // Peupler la base de données
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -45,7 +56,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-app.UseAuthentication();
+//app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
