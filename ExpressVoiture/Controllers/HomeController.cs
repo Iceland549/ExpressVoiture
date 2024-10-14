@@ -19,7 +19,7 @@ namespace ExpressVoiture.Controllers
             {
                 return RedirectToAction("Index", "Voitures");
             }
-            return View();
+            return Redirect("/Identity/Account/Login");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
