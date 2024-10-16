@@ -106,8 +106,7 @@ namespace ExpressVoiture.Migrations
 
                     b.Property<string>("CodeVIN")
                         .IsRequired()
-                        .HasMaxLength(17)
-                        .HasColumnType("nvarchar(17)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("CoutsReparations")
                         .HasColumnType("decimal(18, 2)");
@@ -125,6 +124,9 @@ namespace ExpressVoiture.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Marque")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -140,7 +142,6 @@ namespace ExpressVoiture.Migrations
                         .HasColumnType("decimal(18, 2)");
 
                     b.Property<string>("Reparations")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
