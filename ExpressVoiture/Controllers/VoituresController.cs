@@ -22,7 +22,8 @@ namespace ExpressVoiture.Controllers
         // GET: Voitures
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Voitures.ToListAsync());
+            var listVoitures = await _context.Voitures.ToListAsync();
+            return View(listVoitures);
         }
 
         // GET: Voitures/Details/5
