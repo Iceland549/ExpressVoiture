@@ -56,13 +56,23 @@ namespace ExpressVoiture.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CodeVIN,Année,Marque,Modèle,Finition,DateAchat,PrixAchat,Reparations,CoutsReparation,DateDisponibilite,PrixVente,DateVente")] Voiture voiture)
+        public async Task<IActionResult> Create([Bind("Id,CodeVIN,Année,Marque,Modèle,Finition,DateAchat,PrixAchat,Reparations,CoutsReparation,DateDisponibilite,PrixVente,DateVente")] Voiture voiture, IFormFile ImageFile)
         {
             if (ModelState.IsValid)
             {
+                if (ImageFile != null && ImageFile.Length > 0)
+                {
+                    var fileName = Path.GetFileName(ImageFile.FileName);
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await ImageFile.CopyToAsync(fileStream);
+                    }
+                    voiture.ImageUrl = "/images/" + fileName;
+                }
                 _context.Add(voiture);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("ConfirmationAjout");
             }
             return View(voiture);
         }
@@ -83,13 +93,19 @@ namespace ExpressVoiture.Controllers
             return View(voiture);
         }
 
+        public IActionResult ConfirmationAjout()
+        {
+            return View();
+        }
+
+
         // POST: Voitures/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,CodeVIN,Année,Marque,Modèle,Finition,DateAchat,PrixAchat,Reparations,CoutsReparation,DateDisponibilite,PrixVente,DateVente")] Voiture voiture)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CodeVIN,Année,Marque,Modèle,Finition,DateAchat,PrixAchat,Reparations,CoutsReparation,DateDisponibilite,PrixVente,DateVente")] Voiture voiture, IFormFile ImageFile)
         {
             if (id != voiture.Id)
             {
@@ -100,6 +116,17 @@ namespace ExpressVoiture.Controllers
             {
                 try
                 {
+                    // Gestion de l'image si une nouvelle est uploadée
+                    if (ImageFile != null && ImageFile.Length > 0)
+                    {
+                        var fileName = Path.GetFileName(ImageFile.FileName);
+                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await ImageFile.CopyToAsync(fileStream);
+                        }
+                        voiture.ImageUrl = "/images/" + fileName; // Mettre à jour l'URL de l'image
+                    }
                     _context.Update(voiture);
                     await _context.SaveChangesAsync();
                 }
@@ -149,8 +176,19 @@ namespace ExpressVoiture.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("ConfirmationSuppression", voiture);
         }
+
+        public IActionResult ConfirmationSuppression(Voiture voiture)
+        {
+            return View("SuppressionOk", voiture);
+        }
+
+        public IActionResult SuppressionOk(Voiture voiture)
+        {
+            return View(voiture);
+        }
+
 
         private bool VoitureExists(int id)
         {
