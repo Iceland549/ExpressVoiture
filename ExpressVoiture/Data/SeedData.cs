@@ -41,7 +41,7 @@ namespace ExpressVoiture.Data
                 {
                     new Voiture
                     {
-                        CodeVIN = "",
+                        CodeVIN = "Mazda001",
                         Annee = 2019,
                         Marque = "Mazda",
                         Modele = "Miata",
@@ -52,11 +52,12 @@ namespace ExpressVoiture.Data
                         CoutsReparations = 7600.00m,
                         DateDisponibilite = new DateTime(2022, 4, 7),
                         PrixVente = 9900.00m,
-                        DateVente = new DateTime(2022, 4, 8)
+                        DateVente = new DateTime(2022, 4, 8),
+                        ImageUrl = "/images/Mazda001.jpg",
                     },
                     new Voiture
                     {
-                        CodeVIN = "",
+                        CodeVIN = "Jeep001",
                         Annee = 2007,
                         Marque = "Jeep",
                         Modele = "Liberty",
@@ -67,11 +68,12 @@ namespace ExpressVoiture.Data
                         CoutsReparations = 350.00m,
                         DateDisponibilite = new DateTime(2022, 4, 7),
                         PrixVente = 5350.00m,
-                        DateVente = new DateTime(2022, 4, 9)
+                        DateVente = new DateTime(2022, 4, 9),
+                        ImageUrl = "/images/Jeep001.jpg",
                     },
                     new Voiture
                     {
-                        CodeVIN = "",
+                        CodeVIN = "Renault001",
                         Annee = 2007,
                         Marque = "Renault",
                         Modele = "Scenic",
@@ -82,11 +84,12 @@ namespace ExpressVoiture.Data
                         CoutsReparations = 690.00m,
                         DateDisponibilite = new DateTime(2022, 4, 8),
                         PrixVente = 2990.00m,
-                        DateVente = null // Si la date de vente n'est pas spécifiée
+                        DateVente = null, // Si la date de vente n'est pas spécifiée
+                        ImageUrl = "/images/Renault001.jpg",
                     },
                     new Voiture
                     {
-                        CodeVIN = "",
+                        CodeVIN = "Ford001",
                         Annee = 2017,
                         Marque = "Ford",
                         Modele = "Explorer",
@@ -97,11 +100,12 @@ namespace ExpressVoiture.Data
                         CoutsReparations = 1100.00m,
                         DateDisponibilite = new DateTime(2022, 4, 9),
                         PrixVente = 25950.00m,
-                        DateVente = null
+                        DateVente = null,
+                        ImageUrl = "/images/Ford001.jpg",
                     },
                     new Voiture
                     {
-                        CodeVIN = "",
+                        CodeVIN = "Honda001",
                         Annee = 2008,
                         Marque = "Honda",
                         Modele = "Civic",
@@ -112,11 +116,12 @@ namespace ExpressVoiture.Data
                         CoutsReparations = 475.00m,
                         DateDisponibilite = new DateTime(2022, 4, 9),
                         PrixVente = 4975.00m,
-                        DateVente = new DateTime(2022, 4, 9)
+                        DateVente = new DateTime(2022, 4, 9),
+                        ImageUrl = "/images/Honda001.jpg",
                     },
                     new Voiture
                     {
-                        CodeVIN = "",
+                        CodeVIN = "Volks001",
                         Annee = 2016,
                         Marque = "Volkswagen",
                         Modele = "GTI",
@@ -127,11 +132,12 @@ namespace ExpressVoiture.Data
                         CoutsReparations = 440.00m,
                         DateDisponibilite = new DateTime(2022, 4, 10),
                         PrixVente = 16190.00m,
-                        DateVente = new DateTime(2022, 4, 12)
+                        DateVente = new DateTime(2022, 4, 12),
+                        ImageUrl = "/images/Volks001.jpg",
                     },
                     new Voiture
                     {
-                        CodeVIN = "",
+                        CodeVIN = "Ford002",
                         Annee = 2013,
                         Marque = "Ford",
                         Modele = "Edge",
@@ -142,7 +148,8 @@ namespace ExpressVoiture.Data
                         CoutsReparations = 950.00m,
                         DateDisponibilite = new DateTime(2022, 4, 11),
                         PrixVente = 12440.00m,
-                        DateVente = new DateTime(2022, 4, 12)
+                        DateVente = new DateTime(2022, 4, 12),
+                        ImageUrl = "/images/Ford002.jpg",
                     }
                 };
 
