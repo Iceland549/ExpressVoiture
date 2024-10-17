@@ -1,4 +1,4 @@
-html {
+/*html {
   font-size: 14px;
 }
 
@@ -17,6 +17,92 @@ html {
   min-height: 100%;
 }
 
+html, body {
+    height: 100%;*/ /* S'assure que le body prend toute la hauteur de la fenêtre */
+    /*margin: 0;*/ /* Supprime les marges par défaut */
+/*}*/
+
+:root {
+    --color-black: #2C1810;
+    --color-brown: #D9A963;
+    --color-brown-light: #E5BC85; /* Pour l'effet de survol */
+    --color-brown-dark: #C28A41; /* Pour l'effet de survol alternatif */
+}
+
 body {
-  margin-bottom: 60px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20.83px;
+    text-align: center;
+    background-color: var(--color-black);
+    color: white;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Libre Baskerville', serif;
+    font-weight: 700;
+    letter-spacing: -0.07em;
+}
+
+h1 {
+    font-size: 41.54px;
+    line-height: 51.51px;
+}
+
+.btn-brown {
+    /*background-color: var(--color-brown);*/
+    color: var(--color-black);
+    transition: background-color 0.3s ease;
+}
+
+    .btn-brown:hover {
+        background-color: var(--color-brown-light);
+    }
+
+a {
+    color: var(--color-brown);
+    text-decoration: none;
+    transition: transform 0.3s ease;
+    display: inline-block;
+}
+
+    a:hover {
+        transform: translateY(-2px);
+    }
+
+    /* Pour les liens qui ne sont pas en couleur */
+    a.text-muted {
+        color: #6c757d;
+    }
+
+        a.text-muted:hover {
+            color: #5a6268;
+        }
+
+/* Style spécifique pour le formulaire de connexion */
+.login-form {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+    .login-form input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        border: 1px solid var(--color-brown);
+        background-color: rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+
+        .login-form input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+main {
+    margin-top : 10vw;
 }
