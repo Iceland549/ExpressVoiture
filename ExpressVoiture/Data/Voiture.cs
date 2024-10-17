@@ -8,20 +8,19 @@ namespace ExpressVoiture.Data
         public int Id { get; set; }
 
         [Required]
-        [StringLength(17, MinimumLength = 17)]
-        public string CodeVIN { get; set; }
+        public string? CodeVIN { get; set; }
 
         [Range(1990, 2100, ErrorMessage = "L'année doit être entre 1990 et l'année actuelle.")]
         public int Annee { get; set; }
 
         [Required]
-        public string Marque { get; set; }
+        public string? Marque { get; set; }
 
         [Required]
-        public string Modele { get; set; }
+        public string? Modele { get; set; }
 
         [Required]
-        public string Finition { get; set; }
+        public string? Finition { get; set; }
 
         [DataType(DataType.Date)]
         public DateTime DateAchat { get; set; }
@@ -29,7 +28,7 @@ namespace ExpressVoiture.Data
         [Range(0, double.MaxValue, ErrorMessage = "Le prix d'achat doit être positif.")]
         public decimal PrixAchat { get; set; }
 
-        public string Reparations { get; set; }
+        public string? Reparations { get; set; }
 
         [Range(0, double.MaxValue, ErrorMessage = "Le coût des réparations doit être positif.")]
         public decimal CoutsReparations { get; set; }
@@ -42,6 +41,6 @@ namespace ExpressVoiture.Data
 
         [DataType(DataType.Date)]
         public DateTime? DateVente { get; set; }
-
+        public string? ImageUrl { get; set; }
     }
 }
