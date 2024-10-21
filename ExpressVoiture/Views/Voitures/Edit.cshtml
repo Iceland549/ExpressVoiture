@@ -45,7 +45,7 @@
         <label asp-for="ImageUrl" class="control-label"></label>
         <input type="file" name="ImageFile" class="form-control" />
         <p>URL de l'image : @Url.Content($"~/images/{Model.CodeVIN}.jpg")</p>
-        <img src="@Url.Content($"~/images/{Model.CodeVIN}.jpg"))" alt="Image actuelle" style="max-width: 200px;" /> <!-- Afficher l'image actuelle -->
+        <img src="~/images/@Model.ImageUrl", alt="Image actuelle" /> <!-- Afficher l'image actuelle -->
         <span asp-validation-for="ImageUrl" class="text-danger"></span>
     </div>
 
