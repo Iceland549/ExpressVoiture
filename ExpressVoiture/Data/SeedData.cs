@@ -69,7 +69,7 @@ namespace ExpressVoiture.Data
                         DateDisponibilite = new DateTime(2022, 4, 7),
                         PrixVente = 5350.00m,
                         DateVente = new DateTime(2022, 4, 9),
-                        ImageUrl = "/images/Jeep001.jpg",
+                        ImageUrl = "Jeep001.jpg",
                     },
                     new Voiture
                     {
