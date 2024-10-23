@@ -1,50 +1,52 @@
 ﻿@model ExpressVoiture.Data.Voiture
 
-<h2>
-    Ajouter une voiture<br />tous les champs sont obligatoires
-</h2>
+<div class="create-form form-container">
+    <h2>
+        Ajouter une voiture<br />tous les champs sont obligatoires
+    </h2>
 
-<form asp-action="Create" enctype="multipart/form-data">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <form asp-action="Create" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-    <div class="form-group">
-        <label asp-for="CodeVIN" class="control-label"></label>
-        <input asp-for="CodeVIN" class="form-control" />
-        <span asp-validation-for="CodeVIN" class="text-danger"></span>
-    </div>
+        <div class="form-group">
+            <label asp-for="CodeVIN" class="control-label"></label>
+            <input asp-for="CodeVIN" class="form-control" />
+            <span asp-validation-for="CodeVIN" class="text-danger"></span>
+        </div>
 
-    <div class="form-group">
-        <label asp-for="Marque" class="control-label"></label>
-        <input asp-for="Marque" class="form-control" />
-        <span asp-validation-for="Marque" class="text-danger"></span>
-    </div>
+        <div class="form-group">
+            <label asp-for="Marque" class="control-label"></label>
+            <input asp-for="Marque" class="form-control" />
+            <span asp-validation-for="Marque" class="text-danger"></span>
+        </div>
 
-    <div class="form-group">
-        <label asp-for="Modele" class="control-label"></label>
-        <input asp-for="Modele" class="form-control" />
-        <span asp-validation-for="Modele" class="text-danger"></span>
-    </div>
+        <div class="form-group">
+            <label asp-for="Modele" class="control-label"></label>
+            <input asp-for="Modele" class="form-control" />
+            <span asp-validation-for="Modele" class="text-danger"></span>
+        </div>
 
-    <div class="form-group">
-        <label asp-for="Annee" class="control-label"></label>
-        <input asp-for="Annee" class="form-control" type="number" />
-        <span asp-validation-for="Annee" class="text-danger"></span>
-    </div>
+        <div class="form-group">
+            <label asp-for="Annee" class="control-label"></label>
+            <input asp-for="Annee" class="form-control" type="number" />
+            <span asp-validation-for="Annee" class="text-danger"></span>
+        </div>
 
-    <div class="form-group">
-        <label asp-for="PrixVente" class="control-label"></label>
-        <input asp-for="PrixVente" class="form-control" type="number" step="0.01" />
-        <span asp-validation-for="PrixVente" class="text-danger"></span>
-    </div>
+        <div class="form-group">
+            <label asp-for="PrixVente" class="control-label"></label>
+            <input asp-for="PrixVente" class="form-control" type="number" step="0.01" />
+            <span asp-validation-for="PrixVente" class="text-danger"></span>
+        </div>
 
-    <div class="form-group">
-        <label asp-for="ImageUrl" class="control-label"></label>
-        <input type="file" name="ImageFile" class="form-control" />
-        <span asp-validation-for="ImageUrl" class="text-danger"></span>
-    </div>
+        <div class="form-group">
+            <label asp-for="ImageUrl" class="control-label"></label>
+            <input type="file" name="ImageFile" class="form-control" />
+            <span asp-validation-for="ImageUrl" class="text-danger"></span>
+        </div>
 
-    <div class="form-group">
-        <input type="submit" value="Publier" class="btn btn-primary" />
-        <a asp-action="Index" class="btn btn-secondary">Annuler</a>
-    </div>
-</form>
+        <div class="form-group">
+            <input type="submit" value="Publier" class="btn btn-primary" />
+            <a asp-action="Index" class="btn btn-secondary">Annuler</a>
+        </div>
+    </form>
+</div>

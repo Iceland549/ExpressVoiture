@@ -51,7 +51,6 @@ h1 {
 }
 
 .btn-brown {
-    /*background-color: var(--color-brown);*/
     color: var(--color-black);
     transition: background-color 0.3s ease;
 }
@@ -81,8 +80,8 @@ a {
         }
 
 /* Style spécifique pour le formulaire de connexion */
-.login-form {
-    max-width: 400px;
+/*.login-form {
+    max-width: 400vw;
     margin: 0 auto;
     padding: 20px;
     background-color: rgba(255, 255, 255, 0.1);
@@ -92,7 +91,7 @@ a {
     .login-form input {
         width: 100%;
         padding: 10px;
-        margin-bottom: 10px;
+        margin-bottom: 15px;
         border-radius: 5px;
         border: 1px solid var(--color-brown);
         background-color: rgba(255, 255, 255, 0.1);
@@ -101,7 +100,73 @@ a {
 
         .login-form input::placeholder {
             color: rgba(255, 255, 255, 0.5);
-        }
+        }*/
+
+/* Styles communs pour tous les formulaires */
+.form-container {
+    max-width: 400px; /* Taille adaptée pour centrer le formulaire */
+    margin: 0 auto;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-input,
+.form-control {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid var(--color-brown);
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+    .form-input::placeholder,
+    .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+.form-submit {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+.btn-primary {
+    background-color: var(--color-brown);
+    color: white;
+    margin-bottom: 20px;
+}
+
+    .btn-primary:hover {
+        background-color: var(--color-brown-light);
+    }
+
+.btn-secondary {
+    background-color: var(--color-brown-dark);
+    color: white;
+}
+
+    .btn-secondary:hover {
+        background-color: var(--color-brown-light);
+    }
+
+/* Alignement et centrage des boutons */
+.mx-auto {
+    text-align: center;
+}
+
+h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
 
 main {
     margin-top : 10vw;
