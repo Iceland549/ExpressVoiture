@@ -16,19 +16,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddIdentity<Utilisateur, IdentityRole>(options => {
-    options.SignIn.RequireConfirmedAccount = false; // Désactivation de la confirmation d'email
+    options.SignIn.RequireConfirmedAccount = false; 
 })
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
 
 builder.Services.AddControllersWithViews();
-
-//builder.Services.AddAuthorization(options =>
-//{
-//    options.FallbackPolicy = new AuthorizationPolicyBuilder()
-//        .RequireAuthenticatedUser()
-//        .Build();
-//});
 
 var app = builder.Build();
 
