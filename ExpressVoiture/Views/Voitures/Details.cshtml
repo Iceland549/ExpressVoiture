@@ -1,10 +1,10 @@
 ﻿@model ExpressVoiture.Data.Voiture
 
-<div class="row">
-    <div class="col-md-6">
+<div class="row ">
+    <div class="col-md-6 ">
         <img src="@Url.Content($"~/images/{Model.CodeVIN}.jpg")" alt="@Model.Marque @Model.Modele" class="img-fluid" />
     </div>
-    <div class="col-md-6">
+    <div class="col-md-6 padding-top-20">
         <h2>@Model.Marque @Model.Modele</h2>
         <p><strong>Année :</strong> @Model.Annee</p>
         <p><strong>Finition :</strong> @Model.Finition</p>

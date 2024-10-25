@@ -1,110 +1,41 @@
-/*html {
-  font-size: 14px;
-}
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+:root {
+    --color-primary: #1A2A3A; 
+    --color-secondary: #E67E22; 
+    --color-text-primary: #FFFFFF; 
+    --color-text-secondary: #ECF0F1; 
+    --color-background-alt: #34495E;
+    --color-accent: #3498DB; 
 }
 
 html, body {
-    height: 100%;*/ /* S'assure que le body prend toute la hauteur de la fenêtre */
-    /*margin: 0;*/ /* Supprime les marges par défaut */
-/*}*/
-
-:root {
-    --color-black: #2C1810;
-    --color-brown: #D9A963;
-    --color-brown-light: #E5BC85; /* Pour l'effet de survol */
-    --color-brown-dark: #C28A41; /* Pour l'effet de survol alternatif */
+    width: 100%;
 }
-
 body {
     font-family: 'DM Sans', sans-serif;
     font-size: 16px;
     font-weight: 400;
     line-height: 20.83px;
     text-align: center;
-    background-color: var(--color-black);
-    color: white;
+    background-color: var(--color-primary);
+    color: var(--color-text-primary);
 }
 
 h1, h2, h3, h4, h5, h6 {
     font-family: 'Libre Baskerville', serif;
     font-weight: 700;
     letter-spacing: -0.07em;
+    color: var(--color-text-primary);
 }
 
 h1 {
-    font-size: 41.54px;
-    line-height: 51.51px;
+    font-size: 40px;
+    margin-bottom: 20px;
 }
-
-.btn-brown {
-    color: var(--color-black);
-    transition: background-color 0.3s ease;
-}
-
-    .btn-brown:hover {
-        background-color: var(--color-brown-light);
-    }
-
-a {
-    color: var(--color-brown);
-    text-decoration: none;
-    transition: transform 0.3s ease;
-    display: inline-block;
-}
-
-    a:hover {
-        transform: translateY(-2px);
-    }
-
-    /* Pour les liens qui ne sont pas en couleur */
-    a.text-muted {
-        color: #6c757d;
-    }
-
-        a.text-muted:hover {
-            color: #5a6268;
-        }
-
-/* Style spécifique pour le formulaire de connexion */
-/*.login-form {
-    max-width: 400vw;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-}
-
-    .login-form input {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 15px;
-        border-radius: 5px;
-        border: 1px solid var(--color-brown);
-        background-color: rgba(255, 255, 255, 0.1);
-        color: white;
-    }
-
-        .login-form input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
-        }*/
 
 /* Styles communs pour tous les formulaires */
 .form-container {
-    max-width: 400px; /* Taille adaptée pour centrer le formulaire */
+    max-width: 400px; 
     margin: 0 auto;
     padding: 20px;
     background-color: rgba(255, 255, 255, 0.1);
@@ -137,37 +68,113 @@ a {
     margin-top: 10px;
 }
 
-.btn-primary {
-    background-color: var(--color-brown);
-    color: white;
-    margin-bottom: 20px;
+.btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.navbar-light .navbar-nav .nav-link {
+    color: var(--color-primary);
+}
+.navbar-light .navbar-nav .nav-link:hover {
+    color: var(--color-accent);
 }
 
-    .btn-primary:hover {
-        background-color: var(--color-brown-light);
-    }
+.btn-primary {
+    background-color: var(--color-secondary);
+    color: var(--color-primary);
+}
+
+.btn-primary:hover {
+    background-color: var(--color-accent);
+}
 
 .btn-secondary {
-    background-color: var(--color-brown-dark);
-    color: white;
+    background-color: var(--color-background-alt);
+    color: var(--color-text-primary);
 }
 
     .btn-secondary:hover {
-        background-color: var(--color-brown-light);
+        background-color: var(--color-secondary);
     }
 
-/* Alignement et centrage des boutons */
-.mx-auto {
-    text-align: center;
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
 }
 
-h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    text-align: center;
+    .table th, .table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    .table th {
+        background-color: var(--color-accent);
+        color: var(--color-text-primary);
+    }
+
+    .table td {
+        color: var(--color-text-secondary);
+    }
+
+        .table td img {
+            max-width: 100px;
+            border-radius: 8px;
+        }
+.row {
+    padding-top: 20px;
+}
+
+.img-fluid { 
+    width: 30vw;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.main-content {
+    margin-top: 10vh;
+}
+
+.alert {
+    padding: 20px;
+    margin: 10px 0;
+    border-radius: 5px;
+}
+
+.alert-danger {
+    background-color: #CF6679; 
+    color: var(--color-text-primary);
+}
+
+@media (min-width: 320px) and (max-width: 430px) {
+    html, body {
+        width: fit-content;
+    }
+
+    .img-fluid {
+        width: 80vw;
+    }
 }
 
 
-main {
-    margin-top : 10vw;
+@media (max-width: 1024px) {
+
+    .voiture-card {
+        flex-direction: column;
+        align-items: center;
+    }
+
+        .voiture-card img {
+            width: 100%;
+            height: auto;
+        }
+
+    .navbar-toggler {
+        margin-left: auto;
+    }
 }

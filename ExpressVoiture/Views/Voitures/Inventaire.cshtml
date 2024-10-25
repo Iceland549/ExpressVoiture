@@ -1,0 +1,47 @@
+﻿@model IEnumerable<ExpressVoiture.Data.Voiture>
+
+<h2>Inventaire des véhicules</h2>
+
+<a asp-action="Create" class="btn btn-success">Ajouter un véhicule</a> <!-- Lien vers la page Create -->
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Marque</th>
+            <th>Modèle</th>
+            <th>Année</th>
+            <th>Code VIN</th>
+            <th>Finition</th>
+            <th>Date d'Achat</th>
+            <th>Prix d'Achat</th>
+            <th>Réparations</th>
+            <th>Coûts des Réparations</th>
+            <th>Date Disponibilité</th>
+            <th>Prix de Vente</th>
+            <th>Date de Vente</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var voiture in Model)
+        {
+            <tr>
+                <td>@voiture.Marque</td>
+                <td>@voiture.Modele</td>
+                <td>@voiture.Annee</td>
+                <td>@voiture.CodeVIN</td>
+                <td>@voiture.Finition</td>
+                <td>@voiture.DateAchat.ToString("dd/MM/yyyy")</td> <!-- Formatage de la date -->
+                <td>@voiture.PrixAchat.ToString("C")</td> <!-- Formatage en devise -->
+                <td>@voiture.Reparations</td>
+                <td>@voiture.CoutsReparations.ToString("C")</td> <!-- Formatage en devise -->
+                <td>@voiture.DateDisponibilite.ToString("dd/MM/yyyy")</td> <!-- Formatage de la date -->
+                <td>@voiture.PrixVente.ToString("C")</td> <!-- Formatage en devise -->
+                <td>@(voiture.DateVente.HasValue ? voiture.DateVente.Value.ToString("dd/MM/yyyy") : "N/A")</td> <!-- Vérification de la valeur nullable -->
+                <td>
+                    <a asp-action="Edit" asp-route-id="@voiture.Id" class="btn btn-primary">Modifier</a> 
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

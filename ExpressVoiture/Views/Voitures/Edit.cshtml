@@ -1,56 +1,94 @@
 ﻿@model ExpressVoiture.Data.Voiture
 
-@{
-    ViewData["Title"] = "Modifier Voiture";
-}
+<div class="form-container">
+    <h2>Modifier Voiture</h2>
+    <form asp-action="Edit" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-<h1>@ViewData["Title"]</h1>
+        <!-- Champs pré-remplis avec les données de la voiture -->
+        <div class="form-group">
+            <label asp-for="CodeVIN" class="control-label"></label>
+            <input asp-for="CodeVIN" class="form-control" readonly /> <!-- CodeVIN ne peut pas être modifié -->
+            <span asp-validation-for="CodeVIN" class="text-danger"></span>
+        </div>
 
-<form asp-action="Edit" enctype="multipart/form-data">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Marque" class="control-label"></label>
+            <input asp-for="Marque" class="form-control" />
+            <span asp-validation-for="Marque" class="text-danger"></span>
+        </div>
 
-    <!-- Champs pré-remplis avec les données de la voiture -->
-    <div class="form-group">
-        <label asp-for="CodeVIN" class="control-label"></label>
-        <input asp-for="CodeVIN" class="form-control" readonly /> <!-- CodeVIN ne peut pas être modifié -->
-        <span asp-validation-for="CodeVIN" class="text-danger"></span>
-    </div>
+        <div class="form-group">
+            <label asp-for="Modele" class="control-label"></label>
+            <input asp-for="Modele" class="form-control" />
+            <span asp-validation-for="Modele" class="text-danger"></span>
+        </div>
 
-    <div class="form-group">
-        <label asp-for="Marque" class="control-label"></label>
-        <input asp-for="Marque" class="form-control" />
-        <span asp-validation-for="Marque" class="text-danger"></span>
-    </div>
+        <div class="form-group">
+            <label asp-for="Annee" class="control-label"></label>
+            <input asp-for="Annee" class="form-control" type="number" />
+            <span asp-validation-for="Annee" class="text-danger"></span>
+        </div>
 
-    <div class="form-group">
-        <label asp-for="Modele" class="control-label"></label>
-        <input asp-for="Modele" class="form-control" />
-        <span asp-validation-for="Modele" class="text-danger"></span>
-    </div>
+        <div class="form-group">
+            <label asp-for="Finition" class="control-label"></label>
+            <input asp-for="Finition" class="form-control" />
+            <span asp-validation-for="Finition" class="text-danger"></span>
+        </div>
 
-    <div class="form-group">
-        <label asp-for="Annee" class="control-label"></label>
-        <input asp-for="Annee" class="form-control" type="number" />
-        <span asp-validation-for="Annee" class="text-danger"></span>
-    </div>
+        <div class="form-group">
+            <label asp-for="DateAchat" class="control-label"></label>
+            <input asp-for="DateAchat" class="form-control" type="date" />
+            <span asp-validation-for="DateAchat" class="text-danger"></span>
+        </div>
 
-    <div class="form-group">
-        <label asp-for="PrixVente" class="control-label"></label>
-        <input asp-for="PrixVente" class="form-control" type="number" step="0.01" />
-        <span asp-validation-for="PrixVente" class="text-danger"></span>
-    </div>
+        <div class="form-group">
+            <label asp-for="PrixAchat" class="control-label"></label>
+            <input asp-for="PrixAchat" class="form-control" type="number" step="0.01" />
+            <span asp-validation-for="PrixAchat" class="text-danger"></span>
+        </div>
 
-    <!-- Champ pour changer l'image -->
-    <div class="form-group">
-        <label asp-for="ImageUrl" class="control-label"></label>
-        <input type="file" name="ImageFile" class="form-control" />
-        <p>URL de l'image : @Url.Content($"~/images/{Model.CodeVIN}.jpg")</p>
-        <img src="~/images/@Model.ImageUrl", alt="Image actuelle" /> <!-- Afficher l'image actuelle -->
-        <span asp-validation-for="ImageUrl" class="text-danger"></span>
-    </div>
+        <div class="form-group">
+            <label asp-for="Reparations" class="control-label"></label>
+            <textarea asp-for="Reparations" class="form-control" rows="3"></textarea>
+            <span asp-validation-for="Reparations" class="text-danger"></span>
+        </div>
 
-    <div class="form-group">
-        <input type="submit" value="Enregistrer" class="btn btn-primary" />
-        <a asp-action="Index" class="btn btn-secondary">Annuler</a>
-    </div>
-</form>
+        <div class="form-group">
+            <label asp-for="CoutsReparations" class="control-label"></label>
+            <input asp-for="CoutsReparations" class="form-control" type="number" step="0.01" />
+            <span asp-validation-for="CoutsReparations" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="DateDisponibilite" class="control-label"></label>
+            <input asp-for="DateDisponibilite" class="form-control" type="date" />
+            <span asp-validation-for="DateDisponibilite" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="PrixVente" class="control-label"></label>
+            <input asp-for="PrixVente" class="form-control" type="number" step="0.01" />
+            <span asp-validation-for="PrixVente" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="DateVente" class="control-label"></label>
+            <input asp-for="DateVente" class="form-control" type="date" />
+            <span asp-validation-for="DateVente" class="text-danger"></span>
+        </div>
+
+        <!-- Champ pour changer l'image -->
+        <div class="form-group">
+            <label asp-for="ImageUrl" class="control-label"></label>
+            <input type="file" name="ImageFile" class="form-control" />
+            <img src="@Url.Content($"~/images/{Model.CodeVIN}.jpg")" alt="@Model.Marque @Model.Modele" class="img-fluid" />
+            <span asp-validation-for="ImageUrl" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="Enregistrer" class="btn btn-primary" />
+            <a asp-action="Index" class="btn btn-secondary">Annuler</a>
+        </div>
+    </form>
+</div>

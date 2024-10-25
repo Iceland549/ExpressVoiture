@@ -1,14 +1,10 @@
 ﻿@model ExpressVoiture.Data.Voiture
 
-
-<h1>Confirmation de Suppression</h1>
-
-<div class="alert alert-danger">
-    <h4>Suppression Confirmée</h4>
-    <p>Le véhicule <strong>@Model.Marque @Model.Modele</strong> de l'année <strong>@Model.Annee</strong> a bien été supprimé.</p>
-</div>
-
-<div>
+<div class="form-container">
+    <h1>Confirmation de Suppression</h1>
+    <div class="alert alert-danger">
+        <h4>Suppression Confirmée</h4>
+        <p>Le véhicule <strong>@Model.Marque @Model.Modele</strong> de l'année <strong>@Model.Annee</strong> a bien été supprimé.</p>
+    </div>
     <a asp-action="Index" class="btn btn-primary">Retour à la liste des voitures</a>
 </div>
-
