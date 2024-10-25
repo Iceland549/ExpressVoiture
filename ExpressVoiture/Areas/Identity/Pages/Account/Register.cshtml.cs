@@ -141,9 +141,11 @@ namespace ExpressVoiture.Areas.Identity.Pages.Account
                     //}
                     //else
                     //{
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
+                    //await _signInManager.SignInAsync(user, isPersistent: false);
+                    //return LocalRedirect(returnUrl);
                     //}
+                    //TempData["SuccessMessage"] = "Inscription réussie. Veuillez vous connecter.";
+                    return RedirectToPage("./Login", new { newUser = true });
                 }
                 foreach (var error in result.Errors)
                 {
