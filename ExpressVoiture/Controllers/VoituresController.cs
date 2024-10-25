@@ -44,6 +44,14 @@ namespace ExpressVoiture.Controllers
             return View(voiture);
         }
 
+        // GET: Voitures/Inventaire
+        public IActionResult Inventaire()
+        {
+            var voitures = _context.Voitures.ToList();
+            return View(voitures); // Retourne la vue Inventaire avec la liste de voitures
+        }
+
+
         // GET: Voitures/Create
         public IActionResult Create()
         {
@@ -56,7 +64,7 @@ namespace ExpressVoiture.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CodeVIN,Année,Marque,Modèle,Finition,DateAchat,PrixAchat,Reparations,CoutsReparation,DateDisponibilite,PrixVente,DateVente")] Voiture voiture, IFormFile ImageFile)
+        public async Task<IActionResult> Create([Bind("Id,CodeVIN,Annee,Marque,Modele,Finition,DateAchat,PrixAchat,Reparations,CoutsReparations,DateDisponibilite,PrixVente,DateVente")] Voiture voiture, IFormFile ImageFile)
         {
             if (ModelState.IsValid)
             {
@@ -105,28 +113,49 @@ namespace ExpressVoiture.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,CodeVIN,Année,Marque,Modèle,Finition,DateAchat,PrixAchat,Reparations,CoutsReparation,DateDisponibilite,PrixVente,DateVente")] Voiture voiture, IFormFile ImageFile)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CodeVIN,Annee,Marque,Modele,Finition,DateAchat,PrixAchat,Reparations,CoutsReparations,DateDisponibilite,PrixVente,DateVente")] Voiture voiture, IFormFile ImageFile)
         {
             if (id != voiture.Id)
             {
                 return NotFound();
             }
-
             if (ModelState.IsValid)
             {
+                //var erreurs = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+
+                //// Afficher les erreurs dans la console ou un log
+                //foreach (var erreur in erreurs)
+                //{
+                //    Console.WriteLine(erreur);
+                //}
                 try
                 {
                     // Gestion de l'image si une nouvelle est uploadée
                     if (ImageFile != null && ImageFile.Length > 0)
                     {
+                        //// Supprimer l'ancienne image si elle existe
+                        //if (!string.IsNullOrEmpty(voiture.ImageUrl))
+                        //{
+                        //    var oldImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", voiture.ImageUrl.TrimStart('/'));
+                        //    if (System.IO.File.Exists(oldImagePath))
+                        //    {
+                        //        System.IO.File.Delete(oldImagePath);
+                        //    }
+                        //}
+
+                        //// Sauvegarder la nouvelle image
                         var fileName = Path.GetFileName(ImageFile.FileName);
                         var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
                         using (var fileStream = new FileStream(filePath, FileMode.Create))
                         {
                             await ImageFile.CopyToAsync(fileStream);
                         }
-                        voiture.ImageUrl = "/images/" + fileName; // Mettre à jour l'URL de l'image
+
+                        // Mettre à jour l'URL de l'image dans le modèle Voiture
+                        voiture.ImageUrl = "/images/" + fileName;
                     }
+
+                    // Mise à jour de la voiture
                     _context.Update(voiture);
                     await _context.SaveChangesAsync();
                 }
