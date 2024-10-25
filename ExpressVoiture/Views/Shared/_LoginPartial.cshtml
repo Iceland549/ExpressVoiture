@@ -3,39 +3,47 @@
 @inject SignInManager<Utilisateur> SignInManager
 @inject UserManager<Utilisateur> UserManager
 
-<nav class="navbar navbar-expand-sm navbar-light bg-light">
-    <div class="container-fluid d-flex justify-content-between align-items-center">
-        <a class="navbar-brand" href="#">Express Voiture</a> <!-- Titre à gauche -->
-        <div class="collapse navbar-collapse justify-content-end">
-            <!-- Justification à droite -->
-            <ul class="navbar-nav">
-                <!-- Liste de navigation à droite -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <ul>
+            <li>
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">Express Voiture</a>
+            </li>
+        </ul>
+        <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Accueil</a> <!-- Lien vers la page d'accueil -->
+                    <a class="nav-link" asp-controller="Home" asp-action="Index">Accueil</a>
                 </li>
 
-                @if (SignInManager.IsSignedIn(User)) // Vérifie si l'utilisateur est connecté
+                @if (SignInManager.IsSignedIn(User))
                 {
-                    @if (User.IsInRole("Admin")) // Vérifie si l'utilisateur est admin
+                    @if (User.IsInRole("Admin"))
                     {
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Voitures" asp-action="Create">Ajouter une voiture</a> <!-- Lien vers le formulaire d'ajout -->
+                            <a class="nav-link" asp-controller="Voitures" asp-action="Create">Ajouter une voiture</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Voitures" asp-action="Inventaire">Inventaire</a>
                         </li>
                     }
 
                     <li class="nav-item">
                         <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                            <button type="submit" class="nav-link btn btn-link text-dark">Se déconnecter</button> <!-- Lien vers la déconnexion -->
+                            <button type="submit" class="nav-link btn btn-link text-dark">Se déconnecter</button>
                         </form>
                     </li>
                 }
                 else
                 {
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">S'inscrire</a> <!-- Lien vers l'inscription -->
+                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Register">S'inscrire</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Se connecter</a> <!-- Lien vers la connexion -->
+                        <a class="nav-link " asp-area="Identity" asp-page="/Account/Login">Se connecter</a>
                     </li>
                 }
             </ul>
