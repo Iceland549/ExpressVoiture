@@ -1,23 +1,25 @@
 ﻿@model ExpressVoiture.Data.Voiture
 
-<h2>Supprimer cette voiture ?</h2>
-<p>Êtes-vous sûr de vouloir supprimer la voiture suivante ?</p>
+<div class="form-container">
+    <h2>Supprimer cette voiture ?</h2>
+    <p>Êtes-vous sûr de vouloir supprimer la voiture suivante ?</p>
 
-<div>
-    <h4>@Model.Marque @Model.Modele</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">Code VIN</dt>
-        <dd class="col-sm-10">@Model.CodeVIN</dd>
-        <dt class="col-sm-2">Année</dt>
-        <dd class="col-sm-10">@Model.Annee</dd>
-        <dt class="col-sm-2">Prix de vente</dt>
-        <dd class="col-sm-10">@Model.PrixVente.ToString("C")</dd>
-    </dl>
+    <div>
+        <h4>@Model.Marque @Model.Modele</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">Code VIN</dt>
+            <dd class="col-sm-10">@Model.CodeVIN</dd>
+            <dt class="col-sm-2">Année</dt>
+            <dd class="col-sm-10">@Model.Annee</dd>
+            <dt class="col-sm-2">Prix de vente</dt>
+            <dd class="col-sm-10">@Model.PrixVente.ToString("C")</dd>
+        </dl>
 
-    <form asp-action="DeleteConfirmed">
-        <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Supprimer" class="btn btn-danger" />
-        <a asp-action="Index" class="btn btn-secondary">Annuler</a>
-    </form>
+        <form asp-action="DeleteConfirmed" method="post">
+            <input type="hidden" asp-for="Id" />
+            <input type="submit" value="Supprimer" class="btn btn-danger" />
+            <a asp-action="Index" class="btn btn-secondary">Annuler</a>
+        </form>
+    </div>
 </div>
