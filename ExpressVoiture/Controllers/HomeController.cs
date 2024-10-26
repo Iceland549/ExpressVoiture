@@ -15,7 +15,7 @@ namespace ExpressVoiture.Controllers
 
         public IActionResult Index()
         {
-            if (User.Identity.IsAuthenticated)
+            if (User.Identity != null && User.Identity.IsAuthenticated)
             {
                 return RedirectToAction("Index", "Voitures");
             }
@@ -23,9 +23,11 @@ namespace ExpressVoiture.Controllers
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        [Route("/Home/Error/{statusCode:int?}")]
+
         public IActionResult Error(int? statusCode)
         {
-            if (statusCode.HasValue && statusCode == 404)
+            if (statusCode == 404)
             {
                 return View("Error");
             }
