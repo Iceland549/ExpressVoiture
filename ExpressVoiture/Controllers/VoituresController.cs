@@ -13,9 +13,11 @@ namespace ExpressVoiture.Controllers
     public class VoituresController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<VoituresController> _logger;
 
-        public VoituresController(ApplicationDbContext context)
+        public VoituresController(ApplicationDbContext context, ILogger<VoituresController> logger)
         {
+            _logger = logger;
             _context = context;
         }
 
@@ -194,29 +196,51 @@ namespace ExpressVoiture.Controllers
         }
 
         // POST: Voitures/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var voiture = await _context.Voitures.FindAsync(id);
             if (voiture != null)
             {
+                var marque = voiture.Marque;
+                var modele = voiture.Modele;
+                
                 _context.Voitures.Remove(voiture);
+                await _context.SaveChangesAsync();
+
+                _logger.LogInformation("Voiture supprimée avec succès, ID: {Id}", voiture.Id);
+                var redirectUrl = Url.Action("ConfirmationSuppression", new { id = voiture.Id });
+                _logger.LogInformation("Redirection vers : {Url}", redirectUrl);
+
+                return RedirectToAction("ConfirmationSuppression", new { id = id, marque, modele });
             }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction("ConfirmationSuppression", voiture);
+            _logger.LogWarning("Aucune voiture trouvée avec l'ID: {Id}", id);
+            return RedirectToAction("Index"); 
         }
 
-        public IActionResult ConfirmationSuppression(Voiture voiture)
+        public IActionResult ConfirmationSuppression(int id, string marque, string modele)
         {
-            return View("SuppressionOk", voiture);
+            ViewBag.Marque = marque;
+            ViewBag.Modele = modele;
+
+            _logger.LogInformation("Tentative d'accès à ConfirmationSuppression avec ID : {Id}", id);
+
+            //var voiture = _context.Voitures.Find(id);
+            //if (voiture == null)
+            //{
+            //    _logger.LogWarning("Aucune voiture trouvée avec l'ID : {Id}", id);
+            //    return NotFound();
+            //}
+
+            return View();
         }
 
-        public IActionResult SuppressionOk(Voiture voiture)
-        {
-            return View(voiture);
-        }
+
+        //public IActionResult SuppressionOk(Voiture voiture)
+        //{
+        //    return View(voiture);
+        //}
 
 
         private bool VoitureExists(int id)
