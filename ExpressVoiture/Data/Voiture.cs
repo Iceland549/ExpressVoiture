@@ -10,7 +10,7 @@ namespace ExpressVoiture.Data
         [Required]
         public string? CodeVIN { get; set; }
 
-        [Range(1990, 2100, ErrorMessage = "L'année doit être entre 1990 et l'année actuelle.")]
+        [CustomRange(1990, ErrorMessage = "L'année doit être entre 1990 et l'année actuelle.")]
         public int Annee { get; set; }
 
         [Required]
@@ -41,6 +41,14 @@ namespace ExpressVoiture.Data
 
         [DataType(DataType.Date)]
         public DateTime? DateVente { get; set; }
+
         public string? ImageUrl { get; set; }
     }
+    public class CustomRangeAttribute : RangeAttribute
+    {
+        public CustomRangeAttribute(int minimum) : base(minimum, DateTime.Now.Year)
+        {
+        }
+    }
 }
+
