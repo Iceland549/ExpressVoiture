@@ -1,46 +1,31 @@
 ﻿@page
 @model LoginModel
 
-<div class="login-form form-container">
-    <!-- Centrer tout le contenu du formulaire -->
-    <h1>@ViewData["Title"]</h1>
-    <div class="row justify-content-center">
-        <!-- Centre le formulaire dans la page -->
-        <div>
-            <section>
-                <form id="account" method="post">
-                    <hr />
-                    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+<div class="form-container">
+    <h2>@ViewData["Title"]</h2>
+    <form id="account" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
 
-                    <!-- Champs avec centrage et largeur ajustée -->
-                    <div class="form-floating">
-                        <!-- Centré avec largeur de 75% -->
-                        <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                        <label asp-for="Input.Email" class="form-label">Email</label>
-                        <span asp-validation-for="Input.Email" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-floating">
-                        <!-- Centré avec largeur de 75% -->
-                        <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
-                        <label asp-for="Input.Password" class="form-label">Password</label>
-                        <span asp-validation-for="Input.Password" class="text-danger"></span>
-                    </div>
-
-                    <div class="mx-auto">
-                        <!-- Bouton de soumission centré -->
-                        <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
-                    </div>
-
-                    <div class="mx-auto">
-                        <p>
-                            <a asp-page="/Account/Register" class="w-100 btn btn-lg btn-secondary">S'inscrire</a>
-                        </p>
-                    </div>
-                </form>
-            </section>
+        <div class="form-group">
+            <label asp-for="Input.Email" class="control-label">Email</label>
+            <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+            <span asp-validation-for="Input.Email" class="text-danger"></span>
         </div>
-    </div>
+
+        <div class="form-group">
+            <label asp-for="Input.Password" class="control-label">Password</label>
+            <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
+            <span asp-validation-for="Input.Password" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <button id="login-submit" type="submit" class="btn btn-primary">Log in</button>
+        </div>
+
+        <div class="form-group">
+            <a asp-page="/Account/Register" class="btn btn-secondary">S'inscrire</a>
+        </div>
+    </form>
 </div>
 
 @section Scripts {
