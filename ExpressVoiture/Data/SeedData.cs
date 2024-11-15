@@ -34,6 +34,71 @@ namespace ExpressVoiture.Data
                 await userManager.AddToRoleAsync(adminUser, "Admin");
             }
 
+
+            if (!context.Marques.Any())
+            {
+                var marques = new List<Marque>
+                {
+                    new Marque
+                    {
+                        Nom = "Mazda",
+                        Modeles = new List<Modele>
+                        {
+                            new Modele { Nom = "Miata" },
+                            new Modele { Nom = "CX-5" }
+                        }
+                    },
+                    new Marque
+                    {
+                        Nom = "Jeep",
+                        Modeles = new List<Modele>
+                        {
+                            new Modele { Nom = "Liberty" },
+                            new Modele { Nom = "Wrangler" }
+                        }
+                    },
+                    new Marque
+                    {
+                        Nom = "Renault",
+                        Modeles = new List<Modele>
+                        {
+                            new Modele { Nom = "Scenic" },
+                            new Modele { Nom = "Clio" }
+                        }
+                    },
+                    new Marque
+                    {
+                        Nom = "Ford",
+                        Modeles = new List<Modele>
+                        {
+                            new Modele { Nom = "Explorer" },
+                            new Modele { Nom = "Edge" }
+                        }
+                    },
+                    new Marque
+                    {
+                        Nom = "Honda",
+                        Modeles = new List<Modele>
+                        {
+                            new Modele { Nom = "Civic" },
+                            new Modele { Nom = "Accord" }
+                        }
+                    },
+                    new Marque
+                    {
+                        Nom = "Volkswagen",
+                        Modeles = new List<Modele>
+                        {
+                            new Modele { Nom = "GTI" },
+                            new Modele { Nom = "Passat" }
+                        }
+                    },
+                    // Ajoutez d'autres marques et modèles si nécessaire
+                };
+
+                await context.Marques.AddRangeAsync(marques);
+                await context.SaveChangesAsync();
+            }
             // Vérifie si des données existent déjà
             if (!context.Voitures.Any())
             {
@@ -43,8 +108,8 @@ namespace ExpressVoiture.Data
                     {
                         CodeVIN = "Mazda001",
                         Annee = 2019,
-                        Marque = "Mazda",
-                        Modele = "Miata",
+                        MarqueId = context.Marques.First(m => m.Nom == "Mazda").Id,
+                        ModeleId = context.Modeles.First(m => m.Nom == "Miata").Id,
                         Finition = "LE",
                         DateAchat = new DateTime(2022, 1, 7),
                         PrixAchat = 1800.00m,
@@ -59,8 +124,8 @@ namespace ExpressVoiture.Data
                     {
                         CodeVIN = "Jeep001",
                         Annee = 2007,
-                        Marque = "Jeep",
-                        Modele = "Liberty",
+                        MarqueId = context.Marques.First(m => m.Nom == "Jeep").Id,
+                        ModeleId = context.Modeles.First(m => m.Nom == "Liberty").Id,
                         Finition = "Sport",
                         DateAchat = new DateTime(2022, 4, 2),
                         PrixAchat = 4500.00m,
@@ -75,8 +140,8 @@ namespace ExpressVoiture.Data
                     {
                         CodeVIN = "Renault001",
                         Annee = 2007,
-                        Marque = "Renault",
-                        Modele = "Scenic",
+                        MarqueId = context.Marques.First(m => m.Nom == "Renault").Id,
+                        ModeleId = context.Modeles.First(m => m.Nom == "Scenic").Id,
                         Finition = "TCe",
                         DateAchat = new DateTime(2022, 4, 4),
                         PrixAchat = 1800.00m,
@@ -91,8 +156,8 @@ namespace ExpressVoiture.Data
                     {
                         CodeVIN = "Ford001",
                         Annee = 2017,
-                        Marque = "Ford",
-                        Modele = "Explorer",
+                        MarqueId = context.Marques.First(m => m.Nom == "Ford").Id,
+                        ModeleId = context.Modeles.First(m => m.Nom == "Explorer").Id,
                         Finition = "XLT",
                         DateAchat = new DateTime(2022, 4, 5),
                         PrixAchat = 24350.00m,
@@ -107,8 +172,8 @@ namespace ExpressVoiture.Data
                     {
                         CodeVIN = "Honda001",
                         Annee = 2008,
-                        Marque = "Honda",
-                        Modele = "Civic",
+                        MarqueId = context.Marques.First(m => m.Nom == "Honda").Id,
+                        ModeleId = context.Modeles.First(m => m.Nom == "Civic").Id,
                         Finition = "LX",
                         DateAchat = new DateTime(2022, 4, 6),
                         PrixAchat = 4000.00m,
@@ -123,8 +188,8 @@ namespace ExpressVoiture.Data
                     {
                         CodeVIN = "Volks001",
                         Annee = 2016,
-                        Marque = "Volkswagen",
-                        Modele = "GTI",
+                        MarqueId = context.Marques.First(m => m.Nom == "Volkswagen").Id,
+                        ModeleId = context.Modeles.First(m => m.Nom == "GTI").Id,
                         Finition = "S",
                         DateAchat = new DateTime(2022, 4, 6),
                         PrixAchat = 15250.00m,
@@ -139,8 +204,8 @@ namespace ExpressVoiture.Data
                     {
                         CodeVIN = "Ford002",
                         Annee = 2013,
-                        Marque = "Ford",
-                        Modele = "Edge",
+                        MarqueId = context.Marques.First(m => m.Nom == "Ford").Id,
+                        ModeleId = context.Modeles.First(m => m.Nom == "Edge").Id,
                         Finition = "SEL",
                         DateAchat = new DateTime(2022, 4, 7),
                         PrixAchat = 10990.00m,
@@ -154,8 +219,8 @@ namespace ExpressVoiture.Data
                 };
 
                 // Ajout des voitures à la base de données
-                context.Voitures.AddRange(voitures);
-                context.SaveChanges(); // Sauvegarde les changements
+                await context.Voitures.AddRangeAsync(voitures);
+                await context.SaveChangesAsync(); // Sauvegarde les changements
             }
 
         }

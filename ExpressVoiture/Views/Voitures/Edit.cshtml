@@ -79,12 +79,12 @@
         </div>
 
         <!-- Champ pour changer l'image -->
-        <div class="form-group">
+@*         <div class="form-group">
             <label asp-for="ImageUrl" class="control-label"></label>
             <input type="file" name="ImageFile" class="form-control" />
             <img src="@Url.Content($"~/images/{Model.CodeVIN}.jpg")" alt="@Model.Marque @Model.Modele" class="img-fluid" />
             <span asp-validation-for="ImageUrl" class="text-danger"></span>
-        </div>
+        </div> *@
 
         <div class="form-group">
             <input type="submit" value="Enregistrer" class="btn btn-primary" />

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ExpressVoiture.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241015144814_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20241111171724_Initiate")]
+    partial class Initiate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,45 @@ namespace ExpressVoiture.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("ExpressVoiture.Data.Marque", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Nom")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Marques");
+                });
+
+            modelBuilder.Entity("ExpressVoiture.Data.Modele", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("MarqueId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Nom")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MarqueId");
+
+                    b.ToTable("Modeles");
+                });
 
             modelBuilder.Entity("ExpressVoiture.Data.Utilisateur", b =>
                 {
@@ -130,13 +169,11 @@ namespace ExpressVoiture.Migrations
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Marque")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("MarqueId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Modele")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ModeleId")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("PrixAchat")
                         .HasColumnType("decimal(18, 2)");
@@ -148,6 +185,10 @@ namespace ExpressVoiture.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MarqueId");
+
+                    b.HasIndex("ModeleId");
 
                     b.ToTable("Voitures");
                 });
@@ -285,6 +326,36 @@ namespace ExpressVoiture.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ExpressVoiture.Data.Modele", b =>
+                {
+                    b.HasOne("ExpressVoiture.Data.Marque", "Marque")
+                        .WithMany("Modeles")
+                        .HasForeignKey("MarqueId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Marque");
+                });
+
+            modelBuilder.Entity("ExpressVoiture.Data.Voiture", b =>
+                {
+                    b.HasOne("ExpressVoiture.Data.Marque", "Marque")
+                        .WithMany()
+                        .HasForeignKey("MarqueId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ExpressVoiture.Data.Modele", "Modele")
+                        .WithMany()
+                        .HasForeignKey("ModeleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Marque");
+
+                    b.Navigation("Modele");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -334,6 +405,11 @@ namespace ExpressVoiture.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ExpressVoiture.Data.Marque", b =>
+                {
+                    b.Navigation("Modeles");
                 });
 #pragma warning restore 612, 618
         }

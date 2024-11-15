@@ -13,10 +13,22 @@ namespace ExpressVoiture.Data
         {
         }
         public DbSet<Voiture> Voitures { get; set; }
+        public DbSet<Marque> Marques { get; set; }
+        public DbSet<Modele> Modeles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Voiture>()
+                .HasOne(v => v.Marque)
+                .WithMany(m => m.Voitures)
+                .HasForeignKey(v => v.MarqueId);
+
+            modelBuilder.Entity<Voiture>()
+                .HasOne(v => v.Modele)
+                .WithMany(m => m.Voitures)
+                .HasForeignKey(v => v.ModeleId);
 
             // Configuration des propriétés de la classe Voiture
             modelBuilder.Entity<Voiture>()

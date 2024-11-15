@@ -24,7 +24,11 @@ namespace ExpressVoiture.Controllers
         // GET: Voitures
         public async Task<IActionResult> Index()
         {
-            var listVoitures = await _context.Voitures.ToListAsync();
+            var listVoitures = await _context.Voitures
+                .Include(v => v.Marque)
+                .Include(v => v.Modele)
+                .ToListAsync();
+
             return View(listVoitures);
         }
 
@@ -57,6 +61,10 @@ namespace ExpressVoiture.Controllers
         // GET: Voitures/Create
         public IActionResult Create()
         {
+            var marques = _context.Marques.ToList();
+            marques.Add(new Marque { Id = -1, Nom = "-- Ajouter une nouvelle marque --" });
+            ViewBag.Marques = new SelectList(marques, "Id", "Nom");
+            ViewBag.Modeles = new SelectList(Enumerable.Empty<Modele>(), "Id", "Nom");
             return View();
         }
 
@@ -66,8 +74,60 @@ namespace ExpressVoiture.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CodeVIN,Annee,Marque,Modele,Finition,DateAchat,PrixAchat,Reparations,CoutsReparations,DateDisponibilite,PrixVente,DateVente")] Voiture voiture, IFormFile ImageFile)
+        public async Task<IActionResult> Create([Bind("Id,CodeVIN,Annee,MarqueId,ModeleId,Finition,DateAchat,PrixAchat,Reparations,CoutsReparations,DateDisponibilite,PrixVente,DateVente")] Voiture voiture, string newMarque, string newModele, IFormFile ImageFile)
         {
+            if (!string.IsNullOrEmpty(newMarque) && !string.IsNullOrEmpty(newModele) &&
+                newMarque.Equals(newModele, StringComparison.OrdinalIgnoreCase))
+            {
+                ModelState.AddModelError("", "La marque et le modèle ne peuvent pas être identiques.");
+                PrepareViewBagForCreate(voiture);
+                return View(voiture);
+            }
+
+            // Ajout de la marque si nécessaire
+            if (voiture.MarqueId == -1)
+            {
+                if (!string.IsNullOrEmpty(newMarque))
+                {
+                    var marque = new Marque { Nom = newMarque };
+                    _context.Marques.Add(marque);
+                    await _context.SaveChangesAsync();
+                    voiture.MarqueId = marque.Id;
+                }
+                else
+                {
+                    ModelState.AddModelError("MarqueId", "Veuillez entrer un nom pour la nouvelle marque.");
+                }
+            }
+
+            // Ajout du modèle si nécessaire
+            if (voiture.ModeleId == -1)
+            {
+                if (!string.IsNullOrEmpty(newModele))
+                {
+                    var modele = new Modele { Nom = newModele, MarqueId = voiture.MarqueId };
+                    _context.Modeles.Add(modele);
+                    await _context.SaveChangesAsync();
+                    voiture.ModeleId = modele.Id;
+                }
+                else
+                {
+                    ModelState.AddModelError("ModeleId", "Veuillez entrer un nom pour le nouveau modèle.");
+                }
+            }
+
+            // Vérification de la cohérence entre la marque et le modèle
+            var selectedMarque = await _context.Marques.FindAsync(voiture.MarqueId);
+            var selectedModele = await _context.Modeles.FindAsync(voiture.ModeleId);
+
+            if (selectedMarque != null && selectedModele != null && selectedModele.MarqueId != selectedMarque.Id)
+            {
+                ModelState.AddModelError("", "Le modèle sélectionné ne correspond pas à la marque.");
+                PrepareViewBagForCreate(voiture);
+                return View(voiture);
+            }
+
+            // Si toutes les vérifications sont valides, on ajoute la voiture
             if (ModelState.IsValid)
             {
                 if (ImageFile != null && ImageFile.Length > 0)
@@ -84,7 +144,40 @@ namespace ExpressVoiture.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction("ConfirmationAjout");
             }
+
+            // Préparer les ViewBag pour les sélections de marques et modèles
+            var marques = _context.Marques.ToList();
+            marques.Add(new Marque { Id = -1, Nom = "-- Ajouter une nouvelle marque --" });
+            ViewBag.Marques = new SelectList(marques, "Id", "Nom", voiture.MarqueId);
+
+            var modeles = voiture.MarqueId != -1 ? _context.Modeles.Where(m => m.MarqueId == voiture.MarqueId).ToList() : new List<Modele>();
+            modeles.Add(new Modele { Id = -1, Nom = "-- Ajouter un nouveau modèle --" });
+            ViewBag.Modeles = new SelectList(modeles, "Id", "Nom", voiture.ModeleId);
+
             return View(voiture);
+        }
+
+
+        //public JsonResult GetModeles(int marqueId)
+        //{
+        //    var modeles = _context.Modeles
+        //        .Where(m => m.MarqueId == marqueId)
+        //        .Select(m => new { m.Id, m.Nom })
+        //        .ToList();
+        //    modeles.Add(new { Id = -1, Nom = "-- Ajouter un nouveau modèle --" });
+
+        //    return Json(modeles);
+        //}
+
+        private void PrepareViewBagForCreate(Voiture voiture)
+        {
+            var marques = _context.Marques.ToList();
+            marques.Add(new Marque { Id = -1, Nom = "-- Ajouter une nouvelle marque --" });
+            ViewBag.Marques = new SelectList(marques, "Id", "Nom", voiture.MarqueId);
+
+            var modeles = voiture.MarqueId != -1 ? _context.Modeles.Where(m => m.MarqueId == voiture.MarqueId).ToList() : new List<Modele>();
+            modeles.Add(new Modele { Id = -1, Nom = "-- Ajouter un nouveau modèle --" });
+            ViewBag.Modeles = new SelectList(modeles, "Id", "Nom", voiture.ModeleId);
         }
 
         // GET: Voitures/Edit/5
@@ -115,7 +208,7 @@ namespace ExpressVoiture.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,CodeVIN,Annee,Marque,Modele,Finition,DateAchat,PrixAchat,Reparations,CoutsReparations,DateDisponibilite,PrixVente,DateVente")] Voiture voiture, IFormFile ImageFile)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CodeVIN,Annee,MarqueId,ModeleId,Finition,DateAchat,PrixAchat,Reparations,CoutsReparations,DateDisponibilite,PrixVente,DateVente")] Voiture voiture, IFormFile ImageFile)
         {
             if (id != voiture.Id)
             {
