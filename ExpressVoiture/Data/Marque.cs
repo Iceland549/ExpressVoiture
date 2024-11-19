@@ -10,9 +10,9 @@ namespace ExpressVoiture.Data
         [Required]
         public string Nom { get; set; } = null!;
 
-        public virtual ICollection<Modele> Modeles { get; set; } = new List<Modele>();
+        public virtual ICollection<Modele> Modeles { get; set; } = [];
 
-        public virtual ICollection<Voiture> Voitures { get; set; } = null!;
+        //public virtual ICollection<Voiture> Voitures { get; set; } = null!;
 
     }
 }

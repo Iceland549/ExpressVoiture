@@ -5,7 +5,7 @@
     <p>Êtes-vous sûr de vouloir supprimer la voiture suivante ?</p>
 
     <div>
-        <h4>@Model.Marque @Model.Modele</h4>
+        <h4>@Model.Marque?.Nom @Model.Modele?.Nom</h4> <!-- Affichage de la marque et du modèle -->
         <hr />
         <dl class="row">
             <dt class="col-sm-2">Code VIN</dt>

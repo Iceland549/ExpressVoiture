@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ExpressVoiture.Data
 {
-    public class Voiture
+    public class Voiture : IValidatableObject
     {
         public int Id { get; set; }
 
@@ -15,11 +15,11 @@ namespace ExpressVoiture.Data
 
         [Required(ErrorMessage = "La marque est requise.")]
         public int MarqueId { get; set; }
-        public virtual Marque? Marque { get; set; }
+        public  Marque? Marque { get; set; }
 
         [Required(ErrorMessage = "Le modèle est requis.")]
         public int ModeleId { get; set; }
-        public virtual Modele? Modele { get; set; }
+        public  Modele? Modele { get; set; }
 
         [Required(ErrorMessage = "La finition est requise.")]
         public string? Finition { get; set; }
@@ -47,12 +47,21 @@ namespace ExpressVoiture.Data
         public DateTime? DateVente { get; set; }
 
         public string? ImageUrl { get; set; }
+
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (Marque != null && Modele != null &&
+                Marque.Nom.Equals(Modele.Nom, StringComparison.OrdinalIgnoreCase))
+            {
+                yield return new ValidationResult(
+                    "La marque et le modèle ne peuvent pas être identiques.",
+                    new[] { nameof(Marque), nameof(Modele) });
+            }
+        }
     }
 
-    public class CustomRangeAttribute : RangeAttribute
+    public class CustomRangeAttribute(int minimum) : RangeAttribute(minimum, DateTime.Now.Year)
     {
-        public CustomRangeAttribute(int minimum) : base(minimum, DateTime.Now.Year)
-        {
-        }
     }
 }

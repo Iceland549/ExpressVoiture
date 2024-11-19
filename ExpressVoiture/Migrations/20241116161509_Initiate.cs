@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace ExpressVoiture.Migrations
 {
     /// <inheritdoc />
@@ -12,7 +14,7 @@ namespace ExpressVoiture.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "AspNetRoles",
+                name: "IdentityRole",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -22,11 +24,24 @@ namespace ExpressVoiture.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetRoles", x => x.Id);
+                    table.PrimaryKey("PK_IdentityRole", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUsers",
+                name: "Marque",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nom = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Marque", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Utilisateur",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -49,24 +64,11 @@ namespace ExpressVoiture.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                    table.PrimaryKey("PK_Utilisateur", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Marques",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Nom = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Marques", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetRoleClaims",
+                name: "IdentityRoleClaim<string>",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -77,17 +79,37 @@ namespace ExpressVoiture.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
+                    table.PrimaryKey("PK_IdentityRoleClaim<string>", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
+                        name: "FK_IdentityRoleClaim<string>_IdentityRole_RoleId",
                         column: x => x.RoleId,
-                        principalTable: "AspNetRoles",
+                        principalTable: "IdentityRole",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUserClaims",
+                name: "Modele",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nom = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MarqueId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Modele", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Modele_Marque_MarqueId",
+                        column: x => x.MarqueId,
+                        principalTable: "Marque",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "IdentityUserClaim<string>",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -98,17 +120,17 @@ namespace ExpressVoiture.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
+                    table.PrimaryKey("PK_IdentityUserClaim<string>", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetUserClaims_AspNetUsers_UserId",
+                        name: "FK_IdentityUserClaim<string>_Utilisateur_UserId",
                         column: x => x.UserId,
-                        principalTable: "AspNetUsers",
+                        principalTable: "Utilisateur",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUserLogins",
+                name: "IdentityUserLogin<string>",
                 columns: table => new
                 {
                     LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -118,17 +140,17 @@ namespace ExpressVoiture.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
+                    table.PrimaryKey("PK_IdentityUserLogin<string>", x => new { x.LoginProvider, x.ProviderKey });
                     table.ForeignKey(
-                        name: "FK_AspNetUserLogins_AspNetUsers_UserId",
+                        name: "FK_IdentityUserLogin<string>_Utilisateur_UserId",
                         column: x => x.UserId,
-                        principalTable: "AspNetUsers",
+                        principalTable: "Utilisateur",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUserRoles",
+                name: "IdentityUserRole<string>",
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -136,23 +158,23 @@ namespace ExpressVoiture.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
+                    table.PrimaryKey("PK_IdentityUserRole<string>", x => new { x.UserId, x.RoleId });
                     table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
+                        name: "FK_IdentityUserRole<string>_IdentityRole_RoleId",
                         column: x => x.RoleId,
-                        principalTable: "AspNetRoles",
+                        principalTable: "IdentityRole",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetUsers_UserId",
+                        name: "FK_IdentityUserRole<string>_Utilisateur_UserId",
                         column: x => x.UserId,
-                        principalTable: "AspNetUsers",
+                        principalTable: "Utilisateur",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUserTokens",
+                name: "IdentityUserToken<string>",
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -162,37 +184,17 @@ namespace ExpressVoiture.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
+                    table.PrimaryKey("PK_IdentityUserToken<string>", x => new { x.UserId, x.LoginProvider, x.Name });
                     table.ForeignKey(
-                        name: "FK_AspNetUserTokens_AspNetUsers_UserId",
+                        name: "FK_IdentityUserToken<string>_Utilisateur_UserId",
                         column: x => x.UserId,
-                        principalTable: "AspNetUsers",
+                        principalTable: "Utilisateur",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Modeles",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Nom = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MarqueId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Modeles", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Modeles_Marques_MarqueId",
-                        column: x => x.MarqueId,
-                        principalTable: "Marques",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Voitures",
+                name: "Voiture",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -213,73 +215,105 @@ namespace ExpressVoiture.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Voitures", x => x.Id);
+                    table.PrimaryKey("PK_Voiture", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Voitures_Marques_MarqueId",
+                        name: "FK_Voiture_Marque_MarqueId",
                         column: x => x.MarqueId,
-                        principalTable: "Marques",
+                        principalTable: "Marque",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Voitures_Modeles_ModeleId",
+                        name: "FK_Voiture_Modele_ModeleId",
                         column: x => x.ModeleId,
-                        principalTable: "Modeles",
+                        principalTable: "Modele",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Marque",
+                columns: new[] { "Id", "Nom" },
+                values: new object[,]
+                {
+                    { 1, "Mazda" },
+                    { 2, "Jeep" },
+                    { 3, "Renault" },
+                    { 4, "Ford" },
+                    { 5, "Honda" },
+                    { 6, "Volkswagen" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Modele",
+                columns: new[] { "Id", "MarqueId", "Nom" },
+                values: new object[,]
+                {
+                    { 1, 1, "Miata" },
+                    { 2, 1, "CX-5" },
+                    { 3, 2, "Liberty" },
+                    { 4, 2, "Wrangler" },
+                    { 5, 3, "Scenic" },
+                    { 6, 3, "Clio" },
+                    { 7, 4, "Explorer" },
+                    { 8, 4, "Edge" },
+                    { 9, 5, "Civic" },
+                    { 10, 5, "Accord" },
+                    { 11, 6, "GTI" },
+                    { 12, 6, "Passat" }
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetRoleClaims_RoleId",
-                table: "AspNetRoleClaims",
-                column: "RoleId");
-
-            migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
-                table: "AspNetRoles",
+                table: "IdentityRole",
                 column: "NormalizedName",
                 unique: true,
                 filter: "[NormalizedName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserClaims_UserId",
-                table: "AspNetUserClaims",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserLogins_UserId",
-                table: "AspNetUserLogins",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserRoles_RoleId",
-                table: "AspNetUserRoles",
+                name: "IX_IdentityRoleClaim<string>_RoleId",
+                table: "IdentityRoleClaim<string>",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_IdentityUserClaim<string>_UserId",
+                table: "IdentityUserClaim<string>",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_IdentityUserLogin<string>_UserId",
+                table: "IdentityUserLogin<string>",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_IdentityUserRole<string>_RoleId",
+                table: "IdentityUserRole<string>",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Modele_MarqueId",
+                table: "Modele",
+                column: "MarqueId");
+
+            migrationBuilder.CreateIndex(
                 name: "EmailIndex",
-                table: "AspNetUsers",
+                table: "Utilisateur",
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
-                table: "AspNetUsers",
+                table: "Utilisateur",
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Modeles_MarqueId",
-                table: "Modeles",
+                name: "IX_Voiture_MarqueId",
+                table: "Voiture",
                 column: "MarqueId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Voitures_MarqueId",
-                table: "Voitures",
-                column: "MarqueId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Voitures_ModeleId",
-                table: "Voitures",
+                name: "IX_Voiture_ModeleId",
+                table: "Voiture",
                 column: "ModeleId");
         }
 
@@ -287,34 +321,34 @@ namespace ExpressVoiture.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AspNetRoleClaims");
+                name: "IdentityRoleClaim<string>");
 
             migrationBuilder.DropTable(
-                name: "AspNetUserClaims");
+                name: "IdentityUserClaim<string>");
 
             migrationBuilder.DropTable(
-                name: "AspNetUserLogins");
+                name: "IdentityUserLogin<string>");
 
             migrationBuilder.DropTable(
-                name: "AspNetUserRoles");
+                name: "IdentityUserRole<string>");
 
             migrationBuilder.DropTable(
-                name: "AspNetUserTokens");
+                name: "IdentityUserToken<string>");
 
             migrationBuilder.DropTable(
-                name: "Voitures");
+                name: "Voiture");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
+                name: "IdentityRole");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Utilisateur");
 
             migrationBuilder.DropTable(
-                name: "Modeles");
+                name: "Modele");
 
             migrationBuilder.DropTable(
-                name: "Marques");
+                name: "Marque");
         }
     }
 }

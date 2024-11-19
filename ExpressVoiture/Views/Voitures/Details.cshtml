@@ -2,11 +2,10 @@
 
 <div class="row ">
     <div class="col-md-6 ">
-        <img src="@Url.Content($"~/images/{Model.CodeVIN}.jpg")" alt="@Model.Marque @Model.Modele" class="img-fluid" />
+        <img src="@Url.Content($"~/images/{Model.CodeVIN}.jpg")" alt="@Model.Marque @Model.Marque?.Modeles?.Where(m => m.Id == Model.ModeleId).First().Nom" class="img-fluid" />
     </div>
     <div class="col-md-6 padding-top-20">
-        <h2>@Model.Marque @Model.Modele</h2>
-        <p><strong>Année :</strong> @Model.Annee</p>
+        <h2>@Model.Marque?.Nom @Model.Modele?.Nom</h2>        <p><strong>Année :</strong> @Model.Annee</p>
         <p><strong>Finition :</strong> @Model.Finition</p>
         <p><strong>Prix de vente :</strong> @Model.PrixVente.ToString("C")</p>
         <p><strong>Date d'achat :</strong> @Model.DateAchat.ToShortDateString()</p>

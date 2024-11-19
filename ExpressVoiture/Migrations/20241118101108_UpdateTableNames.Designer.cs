@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ExpressVoiture.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241115082842_AjoutMarqueModele")]
-    partial class AjoutMarqueModele
+    [Migration("20241118101108_UpdateTableNames")]
+    partial class UpdateTableNames
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,6 +40,38 @@ namespace ExpressVoiture.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Marques");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Nom = "Mazda"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Nom = "Jeep"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Nom = "Renault"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Nom = "Ford"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Nom = "Honda"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Nom = "Volkswagen"
+                        });
                 });
 
             modelBuilder.Entity("ExpressVoiture.Data.Modele", b =>
@@ -62,6 +94,80 @@ namespace ExpressVoiture.Migrations
                     b.HasIndex("MarqueId");
 
                     b.ToTable("Modeles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            MarqueId = 1,
+                            Nom = "Miata"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            MarqueId = 1,
+                            Nom = "CX-5"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            MarqueId = 2,
+                            Nom = "Liberty"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            MarqueId = 2,
+                            Nom = "Wrangler"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            MarqueId = 3,
+                            Nom = "Scenic"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            MarqueId = 3,
+                            Nom = "Clio"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            MarqueId = 4,
+                            Nom = "Explorer"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            MarqueId = 4,
+                            Nom = "Edge"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            MarqueId = 5,
+                            Nom = "Civic"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            MarqueId = 5,
+                            Nom = "Accord"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            MarqueId = 6,
+                            Nom = "GTI"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            MarqueId = 6,
+                            Nom = "Passat"
+                        });
                 });
 
             modelBuilder.Entity("ExpressVoiture.Data.Utilisateur", b =>
@@ -132,7 +238,7 @@ namespace ExpressVoiture.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.ToTable("AspNetUsers", (string)null);
+                    b.ToTable("Utilisateur", (string)null);
                 });
 
             modelBuilder.Entity("ExpressVoiture.Data.Voiture", b =>
@@ -188,8 +294,6 @@ namespace ExpressVoiture.Migrations
 
                     b.HasIndex("MarqueId");
 
-                    b.HasIndex("ModeleId");
-
                     b.ToTable("Voitures");
                 });
 
@@ -217,7 +321,7 @@ namespace ExpressVoiture.Migrations
                         .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
-                    b.ToTable("AspNetRoles", (string)null);
+                    b.ToTable("IdentityRole", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -242,7 +346,7 @@ namespace ExpressVoiture.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetRoleClaims", (string)null);
+                    b.ToTable("IdentityRoleClaim<string>", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -267,7 +371,7 @@ namespace ExpressVoiture.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserClaims", (string)null);
+                    b.ToTable("IdentityUserClaim<string>", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -289,7 +393,7 @@ namespace ExpressVoiture.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins", (string)null);
+                    b.ToTable("IdentityUserLogin<string>", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -304,7 +408,7 @@ namespace ExpressVoiture.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetUserRoles", (string)null);
+                    b.ToTable("IdentityUserRole<string>", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -323,7 +427,7 @@ namespace ExpressVoiture.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens", (string)null);
+                    b.ToTable("IdentityUserToken<string>", (string)null);
                 });
 
             modelBuilder.Entity("ExpressVoiture.Data.Modele", b =>
@@ -340,20 +444,12 @@ namespace ExpressVoiture.Migrations
             modelBuilder.Entity("ExpressVoiture.Data.Voiture", b =>
                 {
                     b.HasOne("ExpressVoiture.Data.Marque", "Marque")
-                        .WithMany("Voitures")
+                        .WithMany()
                         .HasForeignKey("MarqueId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ExpressVoiture.Data.Modele", "Modele")
-                        .WithMany("Voitures")
-                        .HasForeignKey("ModeleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Marque");
-
-                    b.Navigation("Modele");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -410,13 +506,6 @@ namespace ExpressVoiture.Migrations
             modelBuilder.Entity("ExpressVoiture.Data.Marque", b =>
                 {
                     b.Navigation("Modeles");
-
-                    b.Navigation("Voitures");
-                });
-
-            modelBuilder.Entity("ExpressVoiture.Data.Modele", b =>
-                {
-                    b.Navigation("Voitures");
                 });
 #pragma warning restore 612, 618
         }

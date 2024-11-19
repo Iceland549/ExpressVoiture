@@ -26,8 +26,8 @@
         @foreach (var voiture in Model)
         {
             <tr>
-                <td>@voiture.Marque</td>
-                <td>@voiture.Modele</td>
+                <td>@(voiture.Marque?.Nom ?? "N/A")</td>
+                <td>@(voiture.Marque?.Nom != null ? voiture.Marque?.Modeles?.Where(m => m.Id == voiture.ModeleId).First().Nom : "N/A")</td>   
                 <td>@voiture.Annee</td>
                 <td>@voiture.CodeVIN</td>
                 <td>@voiture.Finition</td>

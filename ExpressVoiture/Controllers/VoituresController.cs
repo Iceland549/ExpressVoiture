@@ -10,16 +10,10 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace ExpressVoiture.Controllers
 {
-    public class VoituresController : Controller
+    public class VoituresController(ApplicationDbContext context, ILogger<VoituresController> logger) : Controller
     {
-        private readonly ApplicationDbContext _context;
-        private readonly ILogger<VoituresController> _logger;
-
-        public VoituresController(ApplicationDbContext context, ILogger<VoituresController> logger)
-        {
-            _logger = logger;
-            _context = context;
-        }
+        private readonly ApplicationDbContext _context = context;
+        private readonly ILogger<VoituresController> _logger = logger;
 
         // GET: Voitures
         public async Task<IActionResult> Index()
@@ -41,7 +35,10 @@ namespace ExpressVoiture.Controllers
             }
 
             var voiture = await _context.Voitures
+                .Include(v => v.Marque)
+                .Include(v => v.Modele)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (voiture == null)
             {
                 return NotFound();
@@ -51,10 +48,13 @@ namespace ExpressVoiture.Controllers
         }
 
         // GET: Voitures/Inventaire
-        public IActionResult Inventaire()
+        public async Task<IActionResult> Inventaire()
         {
-            var voitures = _context.Voitures.ToList();
-            return View(voitures); // Retourne la vue Inventaire avec la liste de voitures
+            var voitures = await _context.Voitures
+                .Include(v => v.Marque)
+                .Include(v => v.Modele)
+                .ToListAsync();
+            return View(voitures);
         }
 
 
@@ -74,7 +74,7 @@ namespace ExpressVoiture.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CodeVIN,Annee,MarqueId,ModeleId,Finition,DateAchat,PrixAchat,Reparations,CoutsReparations,DateDisponibilite,PrixVente,DateVente")] Voiture voiture, string newMarque, string newModele, IFormFile ImageFile)
+        public async Task<IActionResult> Create([Bind("Id,CodeVIN,Annee,MarqueId,ModeleId,Finition,DateAchat,PrixAchat,Reparations,CoutsReparations,DateDisponibilite,PrixVente,DateVente")] Voiture voiture, string? newMarque, string? newModele, IFormFile ImageFile)
         {
             if (!string.IsNullOrEmpty(newMarque) && !string.IsNullOrEmpty(newModele) &&
                 newMarque.Equals(newModele, StringComparison.OrdinalIgnoreCase))
@@ -85,7 +85,7 @@ namespace ExpressVoiture.Controllers
             }
 
             // Ajout de la marque si nécessaire
-            if (voiture.MarqueId == -1)
+            if (voiture.MarqueId <= 0)
             {
                 if (!string.IsNullOrEmpty(newMarque))
                 {
@@ -150,7 +150,7 @@ namespace ExpressVoiture.Controllers
             marques.Add(new Marque { Id = -1, Nom = "-- Ajouter une nouvelle marque --" });
             ViewBag.Marques = new SelectList(marques, "Id", "Nom", voiture.MarqueId);
 
-            var modeles = voiture.MarqueId != -1 ? _context.Modeles.Where(m => m.MarqueId == voiture.MarqueId).ToList() : new List<Modele>();
+            var modeles = voiture.MarqueId > 0 ? _context.Modeles.Where(m => m.MarqueId == voiture.MarqueId).ToList() : [];
             modeles.Add(new Modele { Id = -1, Nom = "-- Ajouter un nouveau modèle --" });
             ViewBag.Modeles = new SelectList(modeles, "Id", "Nom", voiture.ModeleId);
 
@@ -158,16 +158,16 @@ namespace ExpressVoiture.Controllers
         }
 
 
-        //public JsonResult GetModeles(int marqueId)
-        //{
-        //    var modeles = _context.Modeles
-        //        .Where(m => m.MarqueId == marqueId)
-        //        .Select(m => new { m.Id, m.Nom })
-        //        .ToList();
-        //    modeles.Add(new { Id = -1, Nom = "-- Ajouter un nouveau modèle --" });
+        public JsonResult GetModeles(int marqueId)
+        {
+            var modeles = _context.Modeles
+                .Where(m => m.MarqueId == marqueId)
+                .Select(m => new { m.Id, m.Nom })
+                .ToList();
+            modeles.Add(new { Id = -1, Nom = "-- Ajouter un nouveau modèle --" });
 
-        //    return Json(modeles);
-        //}
+            return Json(modeles);
+        }
 
         private void PrepareViewBagForCreate(Voiture voiture)
         {
@@ -175,7 +175,7 @@ namespace ExpressVoiture.Controllers
             marques.Add(new Marque { Id = -1, Nom = "-- Ajouter une nouvelle marque --" });
             ViewBag.Marques = new SelectList(marques, "Id", "Nom", voiture.MarqueId);
 
-            var modeles = voiture.MarqueId != -1 ? _context.Modeles.Where(m => m.MarqueId == voiture.MarqueId).ToList() : new List<Modele>();
+            var modeles = voiture.MarqueId != -1 ? [.. _context.Modeles.Where(m => m.MarqueId == voiture.MarqueId)] : new List<Modele>();
             modeles.Add(new Modele { Id = -1, Nom = "-- Ajouter un nouveau modèle --" });
             ViewBag.Modeles = new SelectList(modeles, "Id", "Nom", voiture.ModeleId);
         }
@@ -208,7 +208,7 @@ namespace ExpressVoiture.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,CodeVIN,Annee,MarqueId,ModeleId,Finition,DateAchat,PrixAchat,Reparations,CoutsReparations,DateDisponibilite,PrixVente,DateVente")] Voiture voiture, IFormFile ImageFile)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CodeVIN,Annee,Finition,DateAchat,PrixAchat,Reparations,CoutsReparations,DateDisponibilite,PrixVente,DateVente")] Voiture voiture)
         {
             if (id != voiture.Id)
             {
@@ -216,42 +216,26 @@ namespace ExpressVoiture.Controllers
             }
             if (ModelState.IsValid)
             {
-                //var erreurs = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
-
-                //// Afficher les erreurs dans la console ou un log
-                //foreach (var erreur in erreurs)
-                //{
-                //    Console.WriteLine(erreur);
-                //}
                 try
                 {
-                    // Gestion de l'image si une nouvelle est uploadée
-                    if (ImageFile != null && ImageFile.Length > 0)
+                    var existingVoiture = await _context.Voitures.FindAsync(id);
+                    if (existingVoiture == null)
                     {
-                        //// Supprimer l'ancienne image si elle existe
-                        //if (!string.IsNullOrEmpty(voiture.ImageUrl))
-                        //{
-                        //    var oldImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", voiture.ImageUrl.TrimStart('/'));
-                        //    if (System.IO.File.Exists(oldImagePath))
-                        //    {
-                        //        System.IO.File.Delete(oldImagePath);
-                        //    }
-                        //}
-
-                        //// Sauvegarder la nouvelle image
-                        var fileName = Path.GetFileName(ImageFile.FileName);
-                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
-                        using (var fileStream = new FileStream(filePath, FileMode.Create))
-                        {
-                            await ImageFile.CopyToAsync(fileStream);
-                        }
-
-                        // Mettre à jour l'URL de l'image dans le modèle Voiture
-                        voiture.ImageUrl = "/images/" + fileName;
+                        return NotFound();
                     }
 
+                    // Mise à jour uniquement des propriétés modifiables
+                    existingVoiture.Annee = voiture.Annee;
+                    existingVoiture.Finition = voiture.Finition;
+                    existingVoiture.DateAchat = voiture.DateAchat;
+                    existingVoiture.PrixAchat = voiture.PrixAchat;
+                    existingVoiture.Reparations = voiture.Reparations;
+                    existingVoiture.CoutsReparations = voiture.CoutsReparations;
+                    existingVoiture.DateDisponibilite = voiture.DateDisponibilite;
+                    existingVoiture.PrixVente = voiture.PrixVente;
+                    existingVoiture.DateVente = voiture.DateVente;
                     // Mise à jour de la voiture
-                    _context.Update(voiture);
+                    _context.Update(existingVoiture);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -279,7 +263,10 @@ namespace ExpressVoiture.Controllers
             }
 
             var voiture = await _context.Voitures
+                .Include(v => v.Marque)
+                .Include(v => v.Modele) 
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (voiture == null)
             {
                 return NotFound();
@@ -293,11 +280,16 @@ namespace ExpressVoiture.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var voiture = await _context.Voitures.FindAsync(id);
+            var voiture = await _context.Voitures
+                .Include(v => v.Marque)
+                .Include(v => v.Modele)
+                .FirstOrDefaultAsync(v => v.Id == id);
             if (voiture != null)
             {
-                var marque = voiture.Marque;
-                var modele = voiture.Modele;
+                string marqueNom = voiture.Marque?.Nom ?? "Inconnue";
+                string modeleNom = voiture.Modele?.Nom ?? "Inconnu";
+                //var marque = voiture.Marque;
+                //var modele = voiture.Modele;
                 
                 _context.Voitures.Remove(voiture);
                 await _context.SaveChangesAsync();
@@ -306,7 +298,7 @@ namespace ExpressVoiture.Controllers
                 var redirectUrl = Url.Action("ConfirmationSuppression", new { id = voiture.Id });
                 _logger.LogInformation("Redirection vers : {Url}", redirectUrl);
 
-                return RedirectToAction("ConfirmationSuppression", new { id = id, marque, modele });
+                return RedirectToAction("ConfirmationSuppression", new { id, marque = marqueNom, modele = modeleNom });
             }
             _logger.LogWarning("Aucune voiture trouvée avec l'ID: {Id}", id);
             return RedirectToAction("Index"); 
@@ -314,26 +306,14 @@ namespace ExpressVoiture.Controllers
 
         public IActionResult ConfirmationSuppression(int id, string marque, string modele)
         {
+            ViewBag.Id = id;
             ViewBag.Marque = marque;
             ViewBag.Modele = modele;
 
-            _logger.LogInformation("Tentative d'accès à ConfirmationSuppression avec ID : {Id}", id);
-
-            //var voiture = _context.Voitures.Find(id);
-            //if (voiture == null)
-            //{
-            //    _logger.LogWarning("Aucune voiture trouvée avec l'ID : {Id}", id);
-            //    return NotFound();
-            //}
+            _logger.LogInformation("Accès à ConfirmationSuppression avec ID : {Id}, Marque : {Marque}, Modele : {Modele}", id, marque, modele);
 
             return View();
         }
-
-
-        //public IActionResult SuppressionOk(Voiture voiture)
-        //{
-        //    return View(voiture);
-        //}
 
 
         private bool VoitureExists(int id)

@@ -8,20 +8,20 @@
         <!-- Champs pré-remplis avec les données de la voiture -->
         <div class="form-group">
             <label asp-for="CodeVIN" class="control-label"></label>
-            <input asp-for="CodeVIN" class="form-control" readonly /> <!-- CodeVIN ne peut pas être modifié -->
+            <input type="hidden" asp-for="CodeVIN" class="form-control" readonly /> <!-- CodeVIN ne peut pas être modifié -->
             <span asp-validation-for="CodeVIN" class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <label asp-for="Marque" class="control-label"></label>
-            <input asp-for="Marque" class="form-control" />
+            <input type="hidden" asp-for="Marque" class="form-control" readonly />
             <span asp-validation-for="Marque" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label asp-for="Modele" class="control-label"></label>
-            <input asp-for="Modele" class="form-control" />
-            <span asp-validation-for="Modele" class="text-danger"></span>
+            <label asp-for="ModeleId" class="control-label"></label>
+            <input type="hidden" asp-for="ModeleId" class="form-control" readonly />
+            <span asp-validation-for="ModeleId" class="text-danger"></span>
         </div>
 
         <div class="form-group">
@@ -79,12 +79,11 @@
         </div>
 
         <!-- Champ pour changer l'image -->
-@*         <div class="form-group">
-            <label asp-for="ImageUrl" class="control-label"></label>
-            <input type="file" name="ImageFile" class="form-control" />
+        <div class="form-group">
+            <input type="hidden" class="form-control" readonly />
             <img src="@Url.Content($"~/images/{Model.CodeVIN}.jpg")" alt="@Model.Marque @Model.Modele" class="img-fluid" />
             <span asp-validation-for="ImageUrl" class="text-danger"></span>
-        </div> *@
+        </div>
 
         <div class="form-group">
             <input type="submit" value="Enregistrer" class="btn btn-primary" />

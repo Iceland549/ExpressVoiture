@@ -39,77 +39,71 @@ namespace ExpressVoiture.Data
             {
                 var marques = new List<Marque>
                 {
-                    new Marque
-                    {
-                        Nom = "Mazda",
-                        Modeles = new List<Modele>
-                        {
-                            new Modele { Nom = "Miata" },
-                            new Modele { Nom = "CX-5" }
-                        }
+                    new() {
+                        Nom = "Mazda"
                     },
-                    new Marque
-                    {
-                        Nom = "Jeep",
-                        Modeles = new List<Modele>
-                        {
-                            new Modele { Nom = "Liberty" },
-                            new Modele { Nom = "Wrangler" }
-                        }
+                    new() {
+                        Nom = "Jeep"
                     },
-                    new Marque
-                    {
-                        Nom = "Renault",
-                        Modeles = new List<Modele>
-                        {
-                            new Modele { Nom = "Scenic" },
-                            new Modele { Nom = "Clio" }
-                        }
+                    new() {
+                        Nom = "Renault"
                     },
-                    new Marque
-                    {
-                        Nom = "Ford",
-                        Modeles = new List<Modele>
-                        {
-                            new Modele { Nom = "Explorer" },
-                            new Modele { Nom = "Edge" }
-                        }
+                    new() {
+                        Nom = "Ford"
                     },
-                    new Marque
-                    {
-                        Nom = "Honda",
-                        Modeles = new List<Modele>
-                        {
-                            new Modele { Nom = "Civic" },
-                            new Modele { Nom = "Accord" }
-                        }
+                    new() {
+                        Nom = "Honda"
+                    },                       
+                    new() {
+                        Nom = "Volkswagen"
                     },
-                    new Marque
-                    {
-                        Nom = "Volkswagen",
-                        Modeles = new List<Modele>
-                        {
-                            new Modele { Nom = "GTI" },
-                            new Modele { Nom = "Passat" }
-                        }
-                    },
-                    // Ajoutez d'autres marques et modèles si nécessaire
                 };
 
                 await context.Marques.AddRangeAsync(marques);
                 await context.SaveChangesAsync();
             }
+
+            if (!context.Modeles.Any())
+            {
+                var modeles = new List<Modele>();
+
+                var mazdaId = context.Marques.Where(m => m.Nom == "Mazda").Select(m => m.Id).First();
+                modeles.Add(new Modele { Nom = "Miata", MarqueId = mazdaId });
+                modeles.Add(new Modele { Nom = "CX-5", MarqueId = mazdaId });
+
+                var jeepId = context.Marques.Where(m => m.Nom == "Jeep").Select(m => m.Id).First();
+                modeles.Add(new Modele { Nom = "Liberty", MarqueId = jeepId });
+                modeles.Add(new Modele { Nom = "Wrangler", MarqueId = jeepId });
+
+                var renaultId = context.Marques.Where(m => m.Nom == "Renault").Select(m => m.Id).First();
+                modeles.Add(new Modele { Nom = "Scenic", MarqueId = renaultId });
+                modeles.Add(new Modele { Nom = "Clio", MarqueId = renaultId });
+
+                modeles.Add(new Modele { Nom = "Explorer", MarqueId = 4 });
+                modeles.Add(new Modele { Nom = "Edge", MarqueId = 4 });
+
+                var hondaId = context.Marques.Where(m => m.Nom == "Honda").Select(m => m.Id).First();
+                modeles.Add(new Modele { Nom = "Civic", MarqueId = hondaId });
+                modeles.Add(new Modele { Nom = "Accord", MarqueId = hondaId });
+
+                var volkswagenId = context.Marques.Where(m => m.Nom == "Volkswagen").Select(m => m.Id).First();
+                modeles.Add(new Modele { Nom = "GTI", MarqueId = volkswagenId });
+                modeles.Add(new Modele { Nom = "Passat", MarqueId = volkswagenId });
+
+                await context.Modeles.AddRangeAsync(modeles);
+                await context.SaveChangesAsync();
+            }
+
             // Vérifie si des données existent déjà
             if (!context.Voitures.Any())
             {
                 var voitures = new List<Voiture>
                 {
-                    new Voiture
-                    {
+                    new() {
                         CodeVIN = "Mazda001",
                         Annee = 2019,
-                        MarqueId = context.Marques.First(m => m.Nom == "Mazda").Id,
-                        ModeleId = context.Modeles.First(m => m.Nom == "Miata").Id,
+                        MarqueId = 1,
+                        ModeleId = 1,
                         Finition = "LE",
                         DateAchat = new DateTime(2022, 1, 7),
                         PrixAchat = 1800.00m,
@@ -120,12 +114,11 @@ namespace ExpressVoiture.Data
                         DateVente = new DateTime(2022, 4, 8),
                         ImageUrl = "/images/Mazda001.jpg",
                     },
-                    new Voiture
-                    {
+                    new() {
                         CodeVIN = "Jeep001",
                         Annee = 2007,
-                        MarqueId = context.Marques.First(m => m.Nom == "Jeep").Id,
-                        ModeleId = context.Modeles.First(m => m.Nom == "Liberty").Id,
+                        MarqueId = 2,
+                        ModeleId = 3,
                         Finition = "Sport",
                         DateAchat = new DateTime(2022, 4, 2),
                         PrixAchat = 4500.00m,
@@ -136,12 +129,11 @@ namespace ExpressVoiture.Data
                         DateVente = new DateTime(2022, 4, 9),
                         ImageUrl = "Jeep001.jpg",
                     },
-                    new Voiture
-                    {
+                    new() {
                         CodeVIN = "Renault001",
                         Annee = 2007,
-                        MarqueId = context.Marques.First(m => m.Nom == "Renault").Id,
-                        ModeleId = context.Modeles.First(m => m.Nom == "Scenic").Id,
+                        MarqueId = 3,
+                        ModeleId = 6,
                         Finition = "TCe",
                         DateAchat = new DateTime(2022, 4, 4),
                         PrixAchat = 1800.00m,
@@ -152,12 +144,11 @@ namespace ExpressVoiture.Data
                         DateVente = null, // Si la date de vente n'est pas spécifiée
                         ImageUrl = "/images/Renault001.jpg",
                     },
-                    new Voiture
-                    {
+                    new() {
                         CodeVIN = "Ford001",
                         Annee = 2017,
-                        MarqueId = context.Marques.First(m => m.Nom == "Ford").Id,
-                        ModeleId = context.Modeles.First(m => m.Nom == "Explorer").Id,
+                        MarqueId = 4,
+                        ModeleId = 7,
                         Finition = "XLT",
                         DateAchat = new DateTime(2022, 4, 5),
                         PrixAchat = 24350.00m,
@@ -168,12 +159,11 @@ namespace ExpressVoiture.Data
                         DateVente = null,
                         ImageUrl = "/images/Ford001.jpg",
                     },
-                    new Voiture
-                    {
+                    new() {
                         CodeVIN = "Honda001",
                         Annee = 2008,
-                        MarqueId = context.Marques.First(m => m.Nom == "Honda").Id,
-                        ModeleId = context.Modeles.First(m => m.Nom == "Civic").Id,
+                        MarqueId = 5,
+                        ModeleId = 9,
                         Finition = "LX",
                         DateAchat = new DateTime(2022, 4, 6),
                         PrixAchat = 4000.00m,
@@ -184,12 +174,11 @@ namespace ExpressVoiture.Data
                         DateVente = new DateTime(2022, 4, 9),
                         ImageUrl = "/images/Honda001.jpg",
                     },
-                    new Voiture
-                    {
+                    new() {
                         CodeVIN = "Volks001",
                         Annee = 2016,
-                        MarqueId = context.Marques.First(m => m.Nom == "Volkswagen").Id,
-                        ModeleId = context.Modeles.First(m => m.Nom == "GTI").Id,
+                        MarqueId = 6,
+                        ModeleId = 12,
                         Finition = "S",
                         DateAchat = new DateTime(2022, 4, 6),
                         PrixAchat = 15250.00m,
@@ -200,12 +189,11 @@ namespace ExpressVoiture.Data
                         DateVente = new DateTime(2022, 4, 12),
                         ImageUrl = "/images/Volks001.jpg",
                     },
-                    new Voiture
-                    {
+                    new() {
                         CodeVIN = "Ford002",
                         Annee = 2013,
-                        MarqueId = context.Marques.First(m => m.Nom == "Ford").Id,
-                        ModeleId = context.Modeles.First(m => m.Nom == "Edge").Id,
+                        MarqueId = 4,
+                        ModeleId = 8,
                         Finition = "SEL",
                         DateAchat = new DateTime(2022, 4, 7),
                         PrixAchat = 10990.00m,

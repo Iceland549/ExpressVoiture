@@ -18,14 +18,14 @@
             <div class="voiture-image">
                 <!-- Lien autour de l'image pour rediriger vers la vue de détails -->
                 <a asp-action="Details" asp-route-id="@voiture.Id">
-                    <img src="@Url.Content($"~/images/{voiture.CodeVIN}.jpg")" alt="@voiture.Marque?.Nom @voiture.Modele?.Nom" class="img-fluid" />
+                    <img src="@Url.Content($"~/images/{voiture.CodeVIN}.jpg")" alt="@voiture.Marque?.Nom @voiture.Marque?.Modeles?.Where(m => m.Id == voiture.ModeleId).First().Nom" class="img-fluid" />
                 </a>
             </div>
             <div class="voiture-details">
-                <h3>@(voiture.Marque?.Nom ?? "N/A") @(voiture.Modele?.Nom ?? "N/A")</h3>
+                <h3>@(voiture.Marque?.Nom ?? "N/A") -  @(voiture.Marque?.Nom != null ? voiture.Marque?.Modeles?.Where(m => m.Id == voiture.ModeleId).First().Nom : "N/A")</h3>
                 <p><strong>Prix de vente :</strong> @voiture.PrixVente.ToString("C")</p>
                 <p><strong>Année :</strong> @voiture.Annee</p>
-                <p><strong>Modèle :</strong> @(voiture.Modele?.Nom ?? "N/A")</p>
+                <p><strong>Modèle :</strong> @(voiture.Marque?.Nom != null ? voiture.Marque?.Modeles?.Where(m => m.Id == voiture.ModeleId).First().Nom : "N/A")</p>
                 <p><strong>Finition :</strong> @voiture.Finition</p>
                 <a asp-action="Details" asp-route-id="@voiture.Id" class="btn btn-primary">Détails</a>
             </div>

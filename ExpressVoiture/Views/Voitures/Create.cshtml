@@ -124,7 +124,7 @@
             }
 
             $('#marqueSelect').change(function () {
-                var marqueId = $(this).val();
+                var marqueId = $(this).val() == null ? 0 : $(this).val();
                 if (marqueId == -1) {
                     $('#newMarque').show();
                     $('#modeleSelect').prop('disabled', true);
@@ -157,6 +157,7 @@
                 }
             });
             $('#newModele').on('input', function () {
+                var newMarqueValue = $("#newMarque").val().trim();
                 var newModeleValue = $(this).val().trim();
                 if (newModeleValue.toLowerCase() === newMarqueValue.toLowerCase()) {
                     alert("Le modèle ne peut pas être identique à la marque.");

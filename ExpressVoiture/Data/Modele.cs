@@ -11,12 +11,11 @@ namespace ExpressVoiture.Data
         public string? Nom { get; set; } 
 
         [Required]
-        [ForeignKey("Marque")]
 
         public int MarqueId { get; set; }
         public virtual Marque? Marque { get; set; }
 
-        public virtual ICollection<Voiture> Voitures { get; set; } = null!;
+        //public virtual ICollection<Voiture> Voitures { get; set; } = null!;
 
 
     }
