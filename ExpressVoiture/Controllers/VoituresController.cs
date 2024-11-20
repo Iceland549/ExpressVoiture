@@ -130,6 +130,17 @@ namespace ExpressVoiture.Controllers
             // Si toutes les vérifications sont valides, on ajoute la voiture
             if (ModelState.IsValid)
             {
+                var marque = await _context.Marques.FindAsync(voiture.MarqueId);
+                var modeleNom = voiture.ModeleId != -1
+                    ? (await _context.Modeles.FindAsync(voiture.ModeleId))?.Nom
+                    : Request.Form["newModele"].ToString();
+
+                if (marque != null && !string.IsNullOrEmpty(modeleNom) &&
+                    modeleNom.Equals(marque.Nom, StringComparison.OrdinalIgnoreCase))
+                {
+                    ModelState.AddModelError("ModeleId", "Le nom du modèle ne peut pas être identique à celui de la marque.");
+                    return View(voiture);
+                }
                 if (ImageFile != null && ImageFile.Length > 0)
                 {
                     var fileName = Path.GetFileName(ImageFile.FileName);
