@@ -192,14 +192,14 @@ namespace ExpressVoiture.Controllers
         }
 
         // GET: Voitures/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        [Authorize]
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var voiture = await _context.Voitures
+                .Include(v => v.Marque)
+                .Include(v => v.Modele)
+                .FirstOrDefaultAsync(v => v.Id == id);
 
-            var voiture = await _context.Voitures.FindAsync(id);
             if (voiture == null)
             {
                 return NotFound();
