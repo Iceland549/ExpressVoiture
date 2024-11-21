@@ -15,8 +15,5 @@ namespace ExpressVoiture.Data
         public int MarqueId { get; set; }
         public virtual Marque? Marque { get; set; }
 
-        //public virtual ICollection<Voiture> Voitures { get; set; } = null!;
-
-
     }
 }

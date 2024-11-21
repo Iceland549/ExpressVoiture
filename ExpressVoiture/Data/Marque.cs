@@ -12,7 +12,5 @@ namespace ExpressVoiture.Data
 
         public virtual ICollection<Modele> Modeles { get; set; } = [];
 
-        //public virtual ICollection<Voiture> Voitures { get; set; } = null!;
-
     }
 }
