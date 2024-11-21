@@ -161,9 +161,9 @@ namespace ExpressVoiture.Controllers
             marques.Add(new Marque { Id = -1, Nom = "-- Ajouter une nouvelle marque --" });
             ViewBag.Marques = new SelectList(marques, "Id", "Nom", voiture.MarqueId);
 
-            var modeles = voiture.MarqueId > 0 ? _context.Modeles.Where(m => m.MarqueId == voiture.MarqueId).ToList() : [];
-            modeles.Add(new Modele { Id = -1, Nom = "-- Ajouter un nouveau modèle --" });
-            ViewBag.Modeles = new SelectList(modeles, "Id", "Nom", voiture.ModeleId);
+            //var modeles = voiture.MarqueId > 0 ? _context.Modeles.Where(m => m.MarqueId == voiture.MarqueId).ToList() : [];
+            //modeles.Add(new Modele { Id = -1, Nom = "-- Ajouter un nouveau modèle --" });
+            //ViewBag.Modeles = new SelectList(modeles, "Id", "Nom", voiture.ModeleId);
 
             return View(voiture);
         }
@@ -187,7 +187,7 @@ namespace ExpressVoiture.Controllers
             ViewBag.Marques = new SelectList(marques, "Id", "Nom", voiture.MarqueId);
 
             var modeles = voiture.MarqueId != -1 ? [.. _context.Modeles.Where(m => m.MarqueId == voiture.MarqueId)] : new List<Modele>();
-            modeles.Add(new Modele { Id = -1, Nom = "-- Ajouter un nouveau modèle --" });
+            //modeles.Add(new Modele { Id = -1, Nom = "-- Ajouter un nouveau modèle --" });
             ViewBag.Modeles = new SelectList(modeles, "Id", "Nom", voiture.ModeleId);
         }
 

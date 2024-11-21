@@ -115,7 +115,7 @@
                         $.each(data, function (index, item) {
                             modeleSelect.append($('<option></option>').val(item.id).text(item.nom));
                         });
-                        modeleSelect.append($('<option></option>').val(-1).text('-- Ajouter un nouveau modèle --'));
+                        // modeleSelect.append($('<option></option>').val(-1).text('-- Ajouter un nouveau modèle --'));
                         modeleSelect.prop('disabled', false);
                     });
                 } else {
